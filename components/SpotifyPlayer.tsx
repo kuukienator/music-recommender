@@ -76,7 +76,7 @@ const SpotifyPlayer: VFC<Props> = ({ track, onAddToPlaylist }) => {
     }, [track, deviceId, accessToken]);
 
     return (
-        <div className="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-white">
+        <div className="fixed bottom-0 left-0 right-0 bg-transparent backdrop-blur border-t-2 border-white">
             {track && (
                 <div className="flex items-center justify-between">
                     <img
@@ -86,7 +86,9 @@ const SpotifyPlayer: VFC<Props> = ({ track, onAddToPlaylist }) => {
                     />
                     <div className="flex flex-col">
                         <span className="font-bold">{track?.name}</span>
-                        <span>{track?.artists[0].name}</span>
+                        <span className="font-light">
+                            {track?.artists[0].name}
+                        </span>
                     </div>
                     <div className="mr-2 space-x-2">
                         <Button

@@ -13,23 +13,26 @@ const ArtistGrid: VFC<Props> = ({
     selectedArtistIs,
     toggleArtistSelection,
 }) => (
-    <div className="grid grid-cols-4 md:grid-cols-6  lg:grid-cols-8 max-w-screen-2xl gap-2 px-2">
+    <div className="grid grid-cols-4 md:grid-cols-6  lg:grid-cols-8 max-w-screen-2xl gap-2 px-2 mb-2">
         {artists.map((artist) => (
             <div
                 key={artist.id}
-                className={clsx('cursor-pointer', {
-                    'border-2 border-red-500': selectedArtistIs.includes(
-                        artist.id
-                    ),
-                })}
+                className={clsx(
+                    'cursor-pointer rounded-md bg-white bg-opacity-10 shadow-md p-2 hover:bg-opacity-30',
+                    {
+                        'bg-opacity-70 text-black': selectedArtistIs.includes(
+                            artist.id
+                        ),
+                    }
+                )}
                 onClick={() => toggleArtistSelection(artist)}
             >
                 <img
-                    className="aspect-square object-cover"
+                    className="aspect-square object-cover w-full"
                     src={artist.images.length > 0 ? artist.images[0].url : ''}
                     alt={artist.name}
                 />
-                <p className="px-2">{artist.name}</p>
+                <p className="px-2 mt-2">{artist.name}</p>
             </div>
         ))}
     </div>

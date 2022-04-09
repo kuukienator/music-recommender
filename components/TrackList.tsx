@@ -18,9 +18,14 @@ const TrackList: VFC<Props> = ({ tracks, onAddToPlaylist, onPlay }) => {
             {tracks.map((track) => (
                 <div
                     key={track.id}
-                    className="flex items-center shadow-md justify-between bg-white bg-opacity-10 rounded-md"
+                    className="flex items-center shadow-md justify-between bg-white bg-opacity-10 rounded-md hover:bg-opacity-30"
                 >
-                    <div className="flex space-x-4 items-center">
+                    <a
+                        className="flex space-x-4 items-center"
+                        href={track.external_urls.spotify}
+                        target="_blank"
+                        rel="noreferrer"
+                    >
                         <img
                             className="w-16 h-16 aspect-square"
                             src={getAlbumImage(
@@ -35,7 +40,7 @@ const TrackList: VFC<Props> = ({ tracks, onAddToPlaylist, onPlay }) => {
                                 {track.artists[0].name}
                             </p>
                         </div>
-                    </div>
+                    </a>
                     <div className="flex space-x-2 mx-2">
                         <Button onClick={() => onPlay(track)}>
                             <PlayIcon className="text-white" />

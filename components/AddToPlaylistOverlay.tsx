@@ -22,7 +22,7 @@ const AddToPlaylistOverlay: VFC<Props> = ({ userId, track, onClose }) => {
     return (
         <div
             onClick={() => onClose()}
-            className="bg-black fixed inset-0 bg-opacity-60 flex items-center justify-center backdrop-blur"
+            className="bg-black fixed inset-0 bg-opacity-60 flex items-center justify-center backdrop-blur z-20"
         >
             <div
                 onClick={(e) => {
@@ -37,7 +37,7 @@ const AddToPlaylistOverlay: VFC<Props> = ({ userId, track, onClose }) => {
                 <div className="overflow-y-scroll space-y-2 px-2 flex flex-col my-2">
                     {playlists.map((playlist) => (
                         <button
-                            className="bg-white bg-opacity-10 p-4 cursor-pointer shadow-md rounded-lg text-left hover:text-gray-300 active:blur-sm"
+                            className="bg-white bg-opacity-10 p-4 cursor-pointer shadow-md rounded-lg text-left hover:bg-opacity-30 active:blur-sm"
                             key={playlist.id}
                             onClick={() => {
                                 addTrackToPlaylist(track.id, playlist.id).then(

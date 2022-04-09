@@ -24,7 +24,7 @@ import SelectedItems from '../components/SelectedItems';
 import ArtistGrid from '../components/ArtistGrid';
 
 const TIME_RANGE_OPTIONS: Array<{ label: string; value: TimeRange }> = [
-    { label: 'Years', value: TimeRange.LongTerm },
+    { label: 'Multipe Years', value: TimeRange.LongTerm },
     { label: 'Last 6 months', value: TimeRange.MediumTerm },
     { label: 'Last 4 weeks', value: TimeRange.ShortTerm },
 ];
@@ -195,13 +195,13 @@ const Home: NextPage = () => {
                 </div>
             </header>
 
-            <div className="sticky flex w-full flex-col md:justify-center items-center py-2 space-y-2 md:space-y-0 md:space-x-2 top-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white border-b-2 border-white">
+            <div className="z-10 sticky flex w-full flex-col md:justify-center items-center py-2 space-y-2 md:space-y-0 md:space-x-2 top-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white border-b-2 border-white">
                 <div className="flex flex-col space-y-2 mb-2 items-center">
                     <label htmlFor="time-range">
                         Time range:
                         <select
                             name="time-range"
-                            className="ml-2 p-2 border-2 border-fuchsia-600 rounded-md text-black"
+                            className="ml-2 p-2 border-2 border-fuchsia-600 rounded-md text-black cursor-pointer"
                             value={timeRange}
                             onChange={(e) =>
                                 setTimeRange(e.target.value as TimeRange)
