@@ -201,7 +201,7 @@ const Home: NextPage = () => {
                         Time range:
                         <select
                             name="time-range"
-                            className="ml-2 p-2 border-2 border-fuchsia-600 rounded-md text-black cursor-pointer"
+                            className="ml-2 p-2 border-2 border-fuchsia-600 rounded-md text-white cursor-pointer bg-fuchsia-600 disabled:bg-gray-600"
                             value={timeRange}
                             onChange={(e) =>
                                 setTimeRange(e.target.value as TimeRange)
