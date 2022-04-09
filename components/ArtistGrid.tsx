@@ -13,7 +13,7 @@ const ArtistGrid: VFC<Props> = ({
     selectedArtistIs,
     toggleArtistSelection,
 }) => (
-    <div className="grid grid-cols-4 md:grid-cols-6  lg:grid-cols-8 max-w-screen-2xl gap-2 px-2 mb-2">
+    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6  lg:grid-cols-8 max-w-screen-2xl gap-2 px-2 mb-2">
         {artists.map((artist) => (
             <div
                 key={artist.id}

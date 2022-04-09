@@ -22,6 +22,8 @@ import { getAlbumImage } from '../lib/image';
 import RemoveIcon from '../icons/mono/remove.svg';
 import SelectedItems from '../components/SelectedItems';
 import ArtistGrid from '../components/ArtistGrid';
+import InformationIcon from '../icons/mono/circle-information.svg';
+import InformationOverlay from '../components/InformationOverlay';
 
 const TIME_RANGE_OPTIONS: Array<{ label: string; value: TimeRange }> = [
     { label: 'Multipe Years', value: TimeRange.LongTerm },
@@ -57,6 +59,7 @@ const Home: NextPage = () => {
     const [timeRange, setTimeRange] = useState<TimeRange>(TimeRange.ShortTerm);
     const [trackToAdd, setTrackToAdd] = useState<Track | undefined>();
     const [topMode, setTopMode] = useState<TopMode>(TopMode.None);
+    const [showInformation, toggleShowInformation] = useState<boolean>(false);
 
     const getTopTracks = async (page: number = 0) => {
         const tracks = await getTopItems<Track>(
@@ -178,7 +181,13 @@ const Home: NextPage = () => {
                 <title>Track Recommender | Powered by Spotify</title>
             </Head>
             <header className="flex w-full justify-between items-center px-2 max-w-screen-2xl">
-                <div className="text-xl font-bold">Track Recommender</div>
+                <div className="text-xl font-bold flex space-x-4">
+                    <span>Track Recommender</span>
+                    <InformationIcon
+                        className="cursor-pointer"
+                        onClick={() => toggleShowInformation(true)}
+                    />
+                </div>
                 <div>
                     {user && (
                         <div className="flex justify-center flex-row items-center py-2 space-x-2">
@@ -321,6 +330,11 @@ const Home: NextPage = () => {
                     userId={user.id}
                     track={trackToAdd}
                     onClose={() => setTrackToAdd(undefined)}
+                />
+            )}
+            {showInformation && (
+                <InformationOverlay
+                    onClose={() => toggleShowInformation(false)}
                 />
             )}
             {/* <PreviewPlayer
