@@ -9,6 +9,7 @@ import {
     TimeRange,
     Artist,
     getMusicGenres,
+    SpotifyImageSizes,
 } from '../lib/spotify';
 import clsx from 'clsx';
 import TrackGrid, { TrackGridMode } from '../components/TrackGrid';
@@ -17,6 +18,10 @@ import TrackList from '../components/TrackList';
 import Head from 'next/head';
 import Button from '../components/Button';
 import AddToPlaylistOverlay from '../components/AddToPlaylistOverlay';
+import { getAlbumImage } from '../lib/image';
+import RemoveIcon from '../icons/mono/remove.svg';
+import SelectedItems from '../components/SelectedItems';
+import ArtistGrid from '../components/ArtistGrid';
 
 const TIME_RANGE_OPTIONS: Array<{ label: string; value: TimeRange }> = [
     { label: 'Years', value: TimeRange.LongTerm },
@@ -24,17 +29,26 @@ const TIME_RANGE_OPTIONS: Array<{ label: string; value: TimeRange }> = [
     { label: 'Last 4 weeks', value: TimeRange.ShortTerm },
 ];
 
+enum TopMode {
+    Tracks = 'tracks',
+    Artists = 'artists',
+    None = 'none',
+}
+
 const Home: NextPage = () => {
     const [user, setCurrentUser] = useState<User | undefined>(undefined);
     const [topTracks, setTopTracks] = useState<Array<Track>>([]);
     const [topArtists, setTopArtists] = useState<Array<Artist>>([]);
     const [genres, setGenres] = useState<Array<string>>([]);
+
     const [recommendedTracks, setRecommendedTracks] = useState<Array<Track>>(
         []
     );
+
     const [selectedTrackIds, setSelectedTrackIds] = useState<Array<string>>([]);
     const [selectedArtistIs, setSelectedArtistIs] = useState<Array<string>>([]);
     const [selectedGenres, setSelectedGenres] = useState<Array<string>>([]);
+
     const [hasRecommendations, toggleHasRecommendations] =
         useState<boolean>(false);
 
@@ -42,6 +56,7 @@ const Home: NextPage = () => {
     const [currentPage, setCurrentPage] = useState<number>(0);
     const [timeRange, setTimeRange] = useState<TimeRange>(TimeRange.ShortTerm);
     const [trackToAdd, setTrackToAdd] = useState<Track | undefined>();
+    const [topMode, setTopMode] = useState<TopMode>(TopMode.None);
 
     const getTopTracks = async (page: number = 0) => {
         const tracks = await getTopItems<Track>(
@@ -53,6 +68,7 @@ const Home: NextPage = () => {
         toggleHasRecommendations(false);
         setRecommendedTracks([]);
         setCurrentPage(page + 1);
+        setTopMode(TopMode.Tracks);
     };
 
     const getTopArtists = async (page: number = 0) => {
@@ -65,6 +81,7 @@ const Home: NextPage = () => {
         toggleHasRecommendations(false);
         setRecommendedTracks([]);
         setCurrentPage(page + 1);
+        setTopMode(TopMode.Artists);
     };
 
     const getGenres = async () => {
@@ -86,6 +103,8 @@ const Home: NextPage = () => {
         );
         setRecommendedTracks(tracks);
         toggleHasRecommendations(true);
+        setTopMode(TopMode.None);
+        window.scrollTo(0, 0);
     };
 
     const toggleTrackSelection = (track: Track) => {
@@ -94,7 +113,7 @@ const Home: NextPage = () => {
                 selectedTrackIds.filter((id) => id !== track.id)
             );
         } else {
-            if (selectedTrackIds.length < 5) {
+            if (selectedTrackIds.length + selectedArtistIs.length < 5) {
                 setSelectedTrackIds([...selectedTrackIds, track.id]);
             }
         }
@@ -106,7 +125,7 @@ const Home: NextPage = () => {
                 selectedArtistIs.filter((id) => id !== artist.id)
             );
         } else {
-            if (selectedArtistIs.length < 5) {
+            if (selectedTrackIds.length + selectedArtistIs.length < 5) {
                 setSelectedArtistIs([...selectedArtistIs, artist.id]);
             }
         }
@@ -129,6 +148,16 @@ const Home: NextPage = () => {
 
     const addToPlaylist = (track: Track) => {
         setTrackToAdd(track);
+    };
+
+    const reset = () => {
+        setTopMode(TopMode.None);
+        setSelectedArtistIs([]);
+        setSelectedTrackIds([]);
+        setTopArtists([]);
+        setTopTracks([]);
+        toggleHasRecommendations(false);
+        setRecommendedTracks([]);
     };
 
     useEffect(() => {
@@ -166,104 +195,87 @@ const Home: NextPage = () => {
                 </div>
             </header>
 
-            <div className="sticky flex w-full flex-col md:flex-row md:justify-center items-center py-2 space-y-2 md:space-y-0 md:space-x-2 top-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white border-b-2 border-white">
-                <label htmlFor="time-range">
-                    Time range:
-                    <select
-                        name="time-range"
-                        className="ml-2 p-2 border-2 border-fuchsia-600 rounded-md text-black"
-                        value={timeRange}
-                        onChange={(e) =>
-                            setTimeRange(e.target.value as TimeRange)
-                        }
-                    >
-                        {TIME_RANGE_OPTIONS.map((option) => (
-                            <option key={option.value} value={option.value}>
-                                {option.label}
-                            </option>
-                        ))}
-                    </select>
-                </label>
-
-                <div className="flex space-x-2">
-                    <Button onClick={() => getTopTracks()}>
-                        Get top tracks
-                    </Button>
-                    <Button onClick={() => getTopArtists()}>
-                        Get top artists
-                    </Button>
-                    <Button onClick={() => getGenres()}>Get genres</Button>
-                </div>
-                <Button
-                    onClick={() =>
-                        getRecommendations(
-                            selectedTrackIds,
-                            selectedArtistIs,
-                            selectedGenres
-                        )
-                    }
-                    disabled={
-                        selectedTrackIds.length === 0 &&
-                        selectedArtistIs.length === 0 &&
-                        selectedGenres.length === 0
-                    }
-                >
-                    Get Recommendatons
-                </Button>
-            </div>
-            {topTracks.length > 0 && <p>Select up to 5 tracks:</p>}
-            <div className="flex flex-wrap justify-center">
-                <TrackGrid
-                    tracks={topTracks.filter((track) =>
-                        hasRecommendations
-                            ? selectedTrackIds.includes(track.id)
-                            : true
-                    )}
-                    selection={selectedTrackIds}
-                    onTrackClick={toggleTrackSelection}
-                    mode={
-                        hasRecommendations
-                            ? TrackGridMode.Compact
-                            : TrackGridMode.Standard
-                    }
-                />
-                {/* {!hasRecommendations && topTracks.length > 0 && (
-                    <Button onClick={() => getTopTracks(currentPage)}>
-                        Load more
-                    </Button>
-                )} */}
-            </div>
-
-            <div className="grid grid-cols-4 md:grid-cols-6 max-w-screen-2xl gap-2">
-                {topArtists
-                    .filter((artist) =>
-                        hasRecommendations
-                            ? selectedArtistIs.includes(artist.id)
-                            : true
-                    )
-                    .map((artist) => (
-                        <div
-                            key={artist.id}
-                            className={clsx({
-                                'border-2 border-red-500':
-                                    selectedArtistIs.includes(artist.id),
-                            })}
-                            onClick={() => toggleArtistSelection(artist)}
+            <div className="sticky flex w-full flex-col md:justify-center items-center py-2 space-y-2 md:space-y-0 md:space-x-2 top-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white border-b-2 border-white">
+                <div className="flex flex-col space-y-2 mb-2 items-center">
+                    <label htmlFor="time-range">
+                        Time range:
+                        <select
+                            name="time-range"
+                            className="ml-2 p-2 border-2 border-fuchsia-600 rounded-md text-black"
+                            value={timeRange}
+                            onChange={(e) =>
+                                setTimeRange(e.target.value as TimeRange)
+                            }
                         >
-                            <img
-                                className="aspect-square object-cover"
-                                src={
-                                    artist.images.length > 0
-                                        ? artist.images[0].url
-                                        : ''
-                                }
-                                alt={artist.name}
+                            {TIME_RANGE_OPTIONS.map((option) => (
+                                <option key={option.value} value={option.value}>
+                                    {option.label}
+                                </option>
+                            ))}
+                        </select>
+                    </label>
+                    <div className="flex space-x-2">
+                        <Button onClick={() => getTopTracks()}>
+                            Get top tracks
+                        </Button>
+                        <Button onClick={() => getTopArtists()}>
+                            Get top artists
+                        </Button>
+                        <Button onClick={() => reset()}>Reset</Button>
+                    </div>
+                </div>
+                {!hasRecommendations &&
+                    (selectedArtistIs.length > 0 ||
+                        selectedTrackIds.length > 0 ||
+                        selectedGenres.length > 0) && (
+                        <div className="relative w-full">
+                            <SelectedItems
+                                selectedTracks={selectedTrackIds
+                                    .map((id) =>
+                                        topTracks.find((e) => e.id === id)
+                                    )
+                                    .filter((e): e is Track => !!e)}
+                                selectedArtists={selectedArtistIs
+                                    .map((id) =>
+                                        topArtists.find((e) => e.id === id)
+                                    )
+                                    .filter((e): e is Artist => !!e)}
+                                toggleArtistSelection={toggleArtistSelection}
+                                toggleTrackSelection={toggleTrackSelection}
+                                onGetRecommendations={() => {
+                                    getRecommendations(
+                                        selectedTrackIds,
+                                        selectedArtistIs,
+                                        selectedGenres
+                                    );
+                                }}
                             />
-                            <p className="px-2">{artist.name}</p>
                         </div>
-                    ))}
+                    )}
+            </div>
+            {topMode !== TopMode.None && <p>Select up to 5 items:</p>}
+            <div className="flex flex-wrap justify-center">
+                {topMode === TopMode.Tracks && (
+                    <TrackGrid
+                        tracks={topTracks}
+                        selection={selectedTrackIds}
+                        onTrackClick={toggleTrackSelection}
+                        mode={
+                            hasRecommendations
+                                ? TrackGridMode.Compact
+                                : TrackGridMode.Standard
+                        }
+                    />
+                )}
             </div>
 
+            {topMode === TopMode.Artists && (
+                <ArtistGrid
+                    artists={topArtists}
+                    selectedArtistIs={selectedArtistIs}
+                    toggleArtistSelection={toggleArtistSelection}
+                />
+            )}
             <div className="grid grid-cols-3 gap-2 ">
                 {genres
                     .filter((genre) =>

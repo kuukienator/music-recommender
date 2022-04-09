@@ -19,7 +19,7 @@ const TrackTile: VFC<Props> = ({ track, onTrackClick, selected, mode }) => (
     <div
         key={track.id}
         onClick={() => onTrackClick(track)}
-        className={clsx({
+        className={clsx('cursor-pointer', {
             'border-2 border-red-500':
                 selected && mode === TrackTileMode.Standard,
         })}
@@ -30,9 +30,9 @@ const TrackTile: VFC<Props> = ({ track, onTrackClick, selected, mode }) => (
             className="w-full"
         />
         {mode === TrackTileMode.Standard && (
-            <div className="px-2">
+            <div>
                 <p className="font-bold">{track.name}</p>
-                <p>{track.artists[0].name}</p>
+                <p className="font-light">{track.artists[0].name}</p>
             </div>
         )}
     </div>
