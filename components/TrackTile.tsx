@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import React, { VFC } from 'react';
-import { Track } from '../lib/spotify';
+import { getAlbumImage } from '../lib/image';
+import { SpotifyImageSizes, Track } from '../lib/spotify';
 
 export enum TrackTileMode {
     Standard = 'standard',
@@ -14,11 +15,6 @@ type Props = {
     mode: TrackTileMode;
 };
 
-const getImageUrl = (track: Track): string => {
-    const image = track.album.images.find((image) => image.width === 640);
-    return image ? image.url : track.album.images[0].url;
-};
-
 const TrackTile: VFC<Props> = ({ track, onTrackClick, selected, mode }) => (
     <div
         key={track.id}
@@ -29,7 +25,7 @@ const TrackTile: VFC<Props> = ({ track, onTrackClick, selected, mode }) => (
         })}
     >
         <img
-            src={getImageUrl(track)}
+            src={getAlbumImage(track.album, SpotifyImageSizes.Small)}
             alt={track.album.name}
             className="w-full"
         />

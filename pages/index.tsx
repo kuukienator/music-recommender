@@ -144,11 +144,11 @@ const Home: NextPage = () => {
     }, []);
 
     return (
-        <div className="flex items-center flex-col">
+        <div className="min-h-screen flex items-center flex-col bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white">
             <Head>
-                <title>Spotify Recommender</title>
+                <title>Track Recommender | Powered by Spotify</title>
             </Head>
-            <header className="flex w-full justify-between items-center px-2">
+            <header className="flex w-full justify-between items-center px-2 max-w-screen-2xl">
                 <div className="text-xl font-bold">Track Recommender</div>
                 <div>
                     {user && (
@@ -166,12 +166,12 @@ const Home: NextPage = () => {
                 </div>
             </header>
 
-            <div className="sticky flex w-full flex-col items-center top-0 bg-white border-b-2 border-green-700 py-2 space-y-2">
+            <div className="sticky flex w-full flex-col md:flex-row md:justify-center items-center py-2 space-y-2 md:space-y-0 md:space-x-2 top-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white border-b-2 border-white">
                 <label htmlFor="time-range">
                     Time range:
                     <select
                         name="time-range"
-                        className="ml-2 p-2 border-2 border-green-700 rounded-md"
+                        className="ml-2 p-2 border-2 border-fuchsia-600 rounded-md text-black"
                         value={timeRange}
                         onChange={(e) =>
                             setTimeRange(e.target.value as TimeRange)
@@ -227,14 +227,14 @@ const Home: NextPage = () => {
                             : TrackGridMode.Standard
                     }
                 />
-                {!hasRecommendations && topTracks.length > 0 && (
+                {/* {!hasRecommendations && topTracks.length > 0 && (
                     <Button onClick={() => getTopTracks(currentPage)}>
                         Load more
                     </Button>
-                )}
+                )} */}
             </div>
 
-            <div className="grid grid-cols-4">
+            <div className="grid grid-cols-4 md:grid-cols-6 max-w-screen-2xl gap-2">
                 {topArtists
                     .filter((artist) =>
                         hasRecommendations
@@ -264,7 +264,7 @@ const Home: NextPage = () => {
                     ))}
             </div>
 
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-3 gap-2 ">
                 {genres
                     .filter((genre) =>
                         hasRecommendations
@@ -288,8 +288,10 @@ const Home: NextPage = () => {
                     ))}
             </div>
 
-            {hasRecommendations && <p>Recommendtions:</p>}
-            <div className="flex flex-wrap justify-center">
+            {hasRecommendations && (
+                <p className="text-lg my-2">Recommendtions:</p>
+            )}
+            <div className="flex flex-wrap justify-center text-white">
                 <TrackList
                     tracks={recommendedTracks}
                     selection={[]}

@@ -8,7 +8,7 @@ const Button: FC<Props> = ({ children, className, ...rest }) => (
         {...rest}
         type="button"
         className={clsx(
-            'bg-lime-700 hover:bg-lime-900 active:bg-lime-800 disabled:bg-gray-600 text-white rounded-md p-2 font-bold',
+            'bg-fuchsia-600 hover:bg-fuchsia-900 active:bg-fuchsia-800 disabled:bg-gray-600 text-white rounded-md p-2 font-bold',
             className
         )}
     >

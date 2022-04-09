@@ -18,8 +18,8 @@ type Props = {
 const TrackGrid: VFC<Props> = ({ tracks, onTrackClick, selection, mode }) => {
     return (
         <div
-            className={clsx({
-                'grid grid-cols-2 gap-y-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5':
+            className={clsx('max-w-screen-2xl', {
+                'grid grid-cols-2 gap-2 md:grid-cols-4 px-2 lg:grid-cols-4 xl:grid-cols-5':
                     mode === TrackGridMode.Standard,
                 'grid grid-cols-5 gap-x-2 mx-2': mode === TrackGridMode.Compact,
             })}

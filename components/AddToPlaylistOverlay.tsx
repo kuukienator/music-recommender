@@ -21,19 +21,23 @@ const AddToPlaylistOverlay: VFC<Props> = ({ userId, track, onClose }) => {
 
     return (
         <div
-            onClick={(e) => {
-                console.log('closing', e);
-            }}
-            className="bg-black fixed inset-0 bg-opacity-80 flex items-center justify-center"
+            onClick={() => onClose()}
+            className="bg-black fixed inset-0 bg-opacity-60 flex items-center justify-center backdrop-blur"
         >
-            <div className="max-h-[80%] bg-white flex flex-col m-2 shadow-md rounded-md">
-                <div className="text-center text-lg border-b-2 border-green-700 font-bold p-2">
+            <div
+                onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }}
+                className="max-h-[80%] min-w-fit bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 flex flex-col m-2 shadow-md rounded-md"
+            >
+                <div className="text-center text-lg font-bold p-2">
                     Select a playlist:
                 </div>
-                <div className="overflow-scroll space-y-2 divide-y-2">
+                <div className="overflow-y-scroll space-y-2 px-2 flex flex-col my-2">
                     {playlists.map((playlist) => (
-                        <div
-                            className="p-2"
+                        <button
+                            className="bg-white bg-opacity-10 p-4 cursor-pointer shadow-md rounded-lg text-left hover:text-gray-300 active:blur-sm"
                             key={playlist.id}
                             onClick={() => {
                                 addTrackToPlaylist(track.id, playlist.id).then(
@@ -42,10 +46,10 @@ const AddToPlaylistOverlay: VFC<Props> = ({ userId, track, onClose }) => {
                             }}
                         >
                             {playlist.name}
-                        </div>
+                        </button>
                     ))}
                 </div>
-                <div className="flex justify-center p-2 border-t-2 border-green-700">
+                <div className="flex justify-center p-2">
                     <Button onClick={() => onClose()}>Cancel</Button>
                 </div>
             </div>

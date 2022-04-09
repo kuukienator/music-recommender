@@ -1,4 +1,3 @@
-import exp from 'constants';
 import { fetchWithToken } from './spotify-auth';
 
 export enum ItemType {
@@ -12,7 +11,17 @@ export enum TimeRange {
     ShortTerm = 'short_term',
 }
 
-export type SpotifyImage = { height: number; width: number; url: string };
+export enum SpotifyImageSizes {
+    Thumbnail = 64,
+    Small = 300,
+    Medium = 640,
+}
+
+export type SpotifyImage = {
+    height: SpotifyImageSizes;
+    width: SpotifyImageSizes;
+    url: string;
+};
 
 export type Album = {
     uri: string;
