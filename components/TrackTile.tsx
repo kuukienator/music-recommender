@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import React, { useState, VFC } from 'react';
 import { getAlbumImage } from '../lib/image';
 import { SpotifyImageSizes, Track } from '../lib/spotify';
+import ProgressiveImage from './ProgressiveImage';
 
 export enum TrackTileMode {
     Standard = 'standard',
@@ -30,26 +31,15 @@ const TrackTile: VFC<Props> = ({ track, onTrackClick, selected, mode }) => {
                 }
             )}
         >
-            <div className="relative aspect-square">
-                {!isLoaded && (
-                    <img
-                        loading="lazy"
-                        src={getAlbumImage(
-                            track.album,
-                            SpotifyImageSizes.Thumbnail
-                        )}
-                        alt={track.album.name}
-                        className="w-full aspect-square blur-md absolute"
-                    />
+            <ProgressiveImage
+                alt={track.album.name}
+                src={getAlbumImage(track.album, SpotifyImageSizes.Medium)}
+                loadingSrc={getAlbumImage(
+                    track.album,
+                    SpotifyImageSizes.Thumbnail
                 )}
-                <img
-                    loading="lazy"
-                    src={getAlbumImage(track.album, SpotifyImageSizes.Medium)}
-                    alt={track.album.name}
-                    className="w-full aspect-square absolute"
-                    onLoad={() => setIsLoaded(true)}
-                />
-            </div>
+            />
+
             {mode === TrackTileMode.Standard && (
                 <div className="mt-2">
                     <p className="font-bold">{track.name}</p>

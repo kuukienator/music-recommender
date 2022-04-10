@@ -1,6 +1,8 @@
 import clsx from 'clsx';
 import React, { VFC } from 'react';
-import { Artist } from '../lib/spotify';
+import { getSpotifyImage } from '../lib/image';
+import { Artist, SpotifyImageSizes } from '../lib/spotify';
+import ProgressiveImage from './ProgressiveImage';
 
 type Props = {
     artists: Array<Artist>;
@@ -27,10 +29,16 @@ const ArtistGrid: VFC<Props> = ({
                 )}
                 onClick={() => toggleArtistSelection(artist)}
             >
-                <img
-                    className="aspect-square object-cover w-full"
-                    src={artist.images.length > 0 ? artist.images[0].url : ''}
+                <ProgressiveImage
                     alt={artist.name}
+                    src={getSpotifyImage(
+                        artist.images,
+                        SpotifyImageSizes.Medium
+                    )}
+                    loadingSrc={getSpotifyImage(
+                        artist.images,
+                        SpotifyImageSizes.Thumbnail
+                    )}
                 />
                 <p className="px-2 mt-2">{artist.name}</p>
             </div>

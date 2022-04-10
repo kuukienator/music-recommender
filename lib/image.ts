@@ -1,12 +1,15 @@
-import { Album, SpotifyImageSizes } from './spotify';
+import { Album, SpotifyImage, SpotifyImageSizes } from './spotify';
 
-const getSmallestImage = (album: Album): string =>
-    album.images.sort((a, b) => a.width - b.width)[0].url;
+const getSmallestImage = (images: Array<SpotifyImage>): string =>
+    images.length > 0 ? images.sort((a, b) => a.width - b.width)[0].url : '';
 
-export const getAlbumImage = (
-    album: Album,
+export const getAlbumImage = (album: Album, size: SpotifyImageSizes): string =>
+    getSpotifyImage(album.images, size);
+
+export const getSpotifyImage = (
+    images: Array<SpotifyImage>,
     size: SpotifyImageSizes
-): string => {
-    const image = album.images.find((image) => image.width === size);
-    return image ? image.url : getSmallestImage(album);
+) => {
+    const image = images.find((image) => image.width === size);
+    return image ? image.url : getSmallestImage(images);
 };
