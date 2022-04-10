@@ -60,36 +60,36 @@ const SpotifyPlayer: VFC<Props> = ({ track, onAddToPlaylist }) => {
         }
     }, [track, deviceId]);
 
+    if (!track) {
+        return null;
+    }
+
     return (
         <div className="fixed bottom-0 left-0 right-0 bg-transparent backdrop-blur border-t-2 border-white">
-            {track && (
-                <div className="flex items-center justify-between">
-                    <img
-                        className="w-20 h-20"
-                        src={track.album.images[0].url}
-                        alt={track.name}
-                    />
-                    <div className="flex flex-col">
-                        <span className="font-bold">{track?.name}</span>
-                        <span className="font-light">
-                            {track?.artists[0].name}
-                        </span>
-                    </div>
-                    <div className="mr-2 space-x-2">
-                        <Button
-                            onClick={() => {
-                                console.log('stopping', player);
-                                player.pause();
-                            }}
-                        >
-                            <StopIcon className="text-white" />
-                        </Button>
-                        <Button onClick={() => onAddToPlaylist(track)}>
-                            <AddIcon className="text-white" />
-                        </Button>
-                    </div>
+            <div className="flex items-center justify-between">
+                <img
+                    className="w-20 h-20"
+                    src={track.album.images[0].url}
+                    alt={track.name}
+                />
+                <div className="flex flex-col">
+                    <span className="font-bold">{track?.name}</span>
+                    <span className="font-light">{track?.artists[0].name}</span>
                 </div>
-            )}
+                <div className="mr-2 space-x-2">
+                    <Button
+                        onClick={() => {
+                            console.log('stopping', player);
+                            player.pause();
+                        }}
+                    >
+                        <StopIcon className="text-white" />
+                    </Button>
+                    <Button onClick={() => onAddToPlaylist(track)}>
+                        <AddIcon className="text-white" />
+                    </Button>
+                </div>
+            </div>
         </div>
     );
 };

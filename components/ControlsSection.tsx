@@ -1,4 +1,5 @@
-import React, { VFC } from 'react';
+import clsx from 'clsx';
+import React, { useEffect, useRef, useState, VFC } from 'react';
 import { Artist, TimeRange, Track } from '../lib/spotify';
 import Button from './Button';
 import SelectedItems from './SelectedItems';
@@ -40,9 +41,48 @@ const ControlsSection: VFC<Props> = ({
     selectedTracks,
     selectedGenres,
 }) => {
+    const containerRef = useRef(null);
+    const [isSticked, toggleIsStickied] = useState<boolean>(false);
+
+    const intersectCallback = (entries: IntersectionObserverEntry[]) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                toggleIsStickied(false);
+            } else {
+                toggleIsStickied(true);
+            }
+        });
+    };
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(intersectCallback, {
+            rootMargin: '-1px 0px 0px 0px',
+            threshold: [1],
+        });
+        if (containerRef.current) {
+            observer.observe(containerRef.current);
+        }
+
+        return () => {
+            if (containerRef.current) {
+                observer.unobserve(containerRef.current);
+            }
+            observer.disconnect();
+        };
+    }, [containerRef]);
+
+    console.log(isSticked);
     return (
-        <div className="z-10 sticky flex w-full flex-col md:justify-center items-center py-2 space-y-2 md:space-y-0 md:space-x-2 top-0 background-gradient border-b-2 border-white">
-            <div className="flex flex-col space-y-2 mb-2 items-center">
+        <div
+            ref={containerRef}
+            className={clsx(
+                'z-10 sticky flex w-full flex-col md:justify-center items-center py-2 space-y-2 md:space-y-0 md:space-x-2 top-0 background-gradient',
+                {
+                    'border-b-2 border-white': isSticked,
+                }
+            )}
+        >
+            <div className="flex flex-col space-y-2 items-center">
                 <label htmlFor="time-range">
                     Time range:
                     <select
