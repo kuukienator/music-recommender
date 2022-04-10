@@ -87,7 +87,7 @@ const ControlsSection: VFC<Props> = ({
         >
             <div
                 className={clsx('flex flex-col space-y-2 items-center', {
-                    'space-y-4 md:max-w-[60vw] px-4': isStartView,
+                    'space-y-4 md:max-w-[60vw] px-8': isStartView,
                 })}
             >
                 <div
