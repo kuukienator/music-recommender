@@ -24,6 +24,14 @@ const InformationOverlay: VFC<Props> = ({ onClose }) => (
             >
                 @kuukienator
             </a>
+            <a
+                href="https://github.com/kuukienator/music-recommender"
+                target="_blank"
+                rel="noreferrer"
+                className="bg-white bg-opacity-10 p-2 cursor-pointer shadow-md rounded-md hover:bg-opacity-30"
+            >
+                Source Code
+            </a>
             <p>2022</p>
         </div>
     </Overlay>
