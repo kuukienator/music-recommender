@@ -81,7 +81,7 @@ const getData = async (
 export const getTopItems = async <T>(
     type: ItemType,
     timeRange: TimeRange,
-    page: number = 0
+    page = 0
 ): Promise<Array<T>> => {
     const limit = 40;
     const offset = page * limit;

@@ -11,7 +11,7 @@ export default function handler(
 ) {
     console.log(req.query);
 
-    var authOptions = {
+    const authOptions = {
         url: 'https://accounts.spotify.com/api/token',
         form: {
             code: req.query.code,

@@ -3,11 +3,11 @@ import { createHash } from 'crypto';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 const generateRandomString = (length: number): string => {
-    var result = '';
-    var characters =
+    let result = '';
+    const characters =
         'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    var charactersLength = characters.length;
-    for (var i = 0; i < length; i++) {
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
         result += characters.charAt(
             Math.floor(Math.random() * charactersLength)
         );
@@ -19,10 +19,10 @@ const createCodeChallenge = (codeVerifier: string): string => {
     return createHash('sha256').update(codeVerifier).digest('base64');
 };
 
-let verifyCode = generateRandomString(64);
+const verifyCode = generateRandomString(64);
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
-    var state = generateRandomString(16);
+    const state = generateRandomString(16);
 
     const url = new URL('https://accounts.spotify.com/authorize');
     url.searchParams.append('client_id', process.env.SPOTIFY_CLIENT_ID || '');

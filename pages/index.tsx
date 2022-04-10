@@ -59,7 +59,7 @@ const Home: NextPage = () => {
     const [topMode, setTopMode] = useState<TopMode>(TopMode.None);
     const [showInformation, toggleShowInformation] = useState<boolean>(false);
 
-    const getTopTracks = async (page: number = 0) => {
+    const getTopTracks = async (page = 0) => {
         const tracks = await getTopItems<Track>(
             ItemType.Tracks,
             timeRange,
@@ -72,7 +72,7 @@ const Home: NextPage = () => {
         setTopMode(TopMode.Tracks);
     };
 
-    const getTopArtists = async (page: number = 0) => {
+    const getTopArtists = async (page = 0) => {
         const artists = await getTopItems<Artist>(
             ItemType.Artists,
             timeRange,

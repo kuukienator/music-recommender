@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import React, { FC, HTMLProps } from 'react';
 
-type Props = HTMLProps<HTMLButtonElement> & {};
+type Props = HTMLProps<HTMLButtonElement>;
 
 const Button: FC<Props> = ({ children, className, ...rest }) => (
     <button
