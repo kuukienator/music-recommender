@@ -20,6 +20,7 @@ import ArtistGrid from '../components/ArtistGrid';
 import InformationIcon from '../icons/mono/circle-information.svg';
 import InformationOverlay from '../components/InformationOverlay';
 import ControlsSection from '../components/ControlsSection';
+import { scrollToTop } from '../lib/util';
 
 const TIME_RANGE_OPTIONS: Array<{ label: string; value: TimeRange }> = [
     { label: 'Multipe Years', value: TimeRange.LongTerm },
@@ -57,6 +58,14 @@ const Home: NextPage = () => {
     const [trackToAdd, setTrackToAdd] = useState<Track | undefined>();
     const [topMode, setTopMode] = useState<TopMode>(TopMode.None);
     const [showInformation, toggleShowInformation] = useState<boolean>(false);
+
+    const getSelectionCount = (): number => {
+        return (
+            selectedTrackIds.length +
+            selectedArtistIs.length +
+            selectedGenres.length
+        );
+    };
 
     const getTopTracks = async (page = 0) => {
         const tracks = await getTopItems<Track>(
@@ -105,7 +114,7 @@ const Home: NextPage = () => {
         setRecommendedTracks(tracks);
         toggleHasRecommendations(true);
         setTopMode(TopMode.None);
-        window.scrollTo(0, 0);
+        scrollToTop();
     };
 
     const toggleSelection = (
@@ -124,40 +133,28 @@ const Home: NextPage = () => {
     };
 
     const toggleTrackSelection = (track: Track) => {
-        const selectionCount =
-            selectedTrackIds.length +
-            selectedArtistIs.length +
-            selectedGenres.length;
         toggleSelection(
             selectedTrackIds,
             track.id,
-            selectionCount,
+            getSelectionCount(),
             setSelectedTrackIds
         );
     };
 
     const toggleArtistSelection = (artist: Artist) => {
-        const selectionCount =
-            selectedTrackIds.length +
-            selectedArtistIs.length +
-            selectedGenres.length;
         toggleSelection(
             selectedArtistIs,
             artist.id,
-            selectionCount,
+            getSelectionCount(),
             setSelectedArtistIs
         );
     };
 
     const toggleGenreSelection = (genre: string) => {
-        const selectionCount =
-            selectedTrackIds.length +
-            selectedArtistIs.length +
-            selectedGenres.length;
         toggleSelection(
             selectedGenres,
             genre,
-            selectionCount,
+            getSelectionCount(),
             setSelectedGenres
         );
     };
@@ -224,6 +221,7 @@ const Home: NextPage = () => {
                 </div>
             </header>
             <ControlsSection
+                isStartView={topMode === TopMode.None && !hasRecommendations}
                 getTopArtists={getTopArtists}
                 getTopTracks={getTopTracks}
                 reset={reset}

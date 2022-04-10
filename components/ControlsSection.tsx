@@ -18,6 +18,7 @@ type Props = {
     selectedArtists: Artist[];
     selectedTracks: Track[];
     selectedGenres: string[];
+    isStartView: boolean;
 };
 
 const TIME_RANGE_OPTIONS: Array<{ label: string; value: TimeRange }> = [
@@ -40,6 +41,7 @@ const ControlsSection: VFC<Props> = ({
     selectedArtists,
     selectedTracks,
     selectedGenres,
+    isStartView,
 }) => {
     const containerRef = useRef(null);
     const [isSticked, toggleIsStickied] = useState<boolean>(false);
@@ -79,10 +81,25 @@ const ControlsSection: VFC<Props> = ({
                 'z-10 sticky flex w-full flex-col md:justify-center items-center py-2 space-y-2 md:space-y-0 md:space-x-2 top-0 background-gradient',
                 {
                     'border-b-2 border-white': isSticked,
+                    'py-40': isStartView,
                 }
             )}
         >
-            <div className="flex flex-col space-y-2 items-center">
+            <div
+                className={clsx('flex flex-col space-y-2 items-center', {
+                    'space-y-4 md:max-w-[60vw] px-4': isStartView,
+                })}
+            >
+                <div
+                    className={clsx({
+                        'mb-8 text-lg md:text-2xl': isStartView,
+                        hidden: !isStartView,
+                    })}
+                >
+                    Get some recommendatons based on your past music. To start
+                    load your top artists or music tracks. You can switch
+                    between them later.
+                </div>
                 <label htmlFor="time-range">
                     Time range:
                     <select
@@ -100,7 +117,11 @@ const ControlsSection: VFC<Props> = ({
                         ))}
                     </select>
                 </label>
-                <div className="flex space-x-2">
+                <div
+                    className={clsx('flex space-x-2', {
+                        'flex-col space-y-6 w-[40vw] space-x-0': isStartView,
+                    })}
+                >
                     <Button onClick={() => getTopTracks()}>
                         Get top tracks
                     </Button>
@@ -112,7 +133,7 @@ const ControlsSection: VFC<Props> = ({
                 </div>
             </div>
             {showSelectedItems && (
-                <div className="relative w-full">
+                <div className="relative w-full pt-2">
                     <SelectedItems
                         selectedTracks={selectedTracks}
                         selectedArtists={selectedArtists}
