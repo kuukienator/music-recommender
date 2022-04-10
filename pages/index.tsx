@@ -15,12 +15,11 @@ import TrackGrid, { TrackGridMode } from '../components/TrackGrid';
 import SpotifyPlayer from '../components/SpotifyPlayer';
 import TrackList from '../components/TrackList';
 import Head from 'next/head';
-import Button from '../components/Button';
 import AddToPlaylistOverlay from '../components/AddToPlaylistOverlay';
-import SelectedItems from '../components/SelectedItems';
 import ArtistGrid from '../components/ArtistGrid';
 import InformationIcon from '../icons/mono/circle-information.svg';
 import InformationOverlay from '../components/InformationOverlay';
+import ControlsSection from '../components/ControlsSection';
 
 const TIME_RANGE_OPTIONS: Array<{ label: string; value: TimeRange }> = [
     { label: 'Multipe Years', value: TimeRange.LongTerm },
@@ -224,68 +223,37 @@ const Home: NextPage = () => {
                     )}
                 </div>
             </header>
-
-            <div className="z-10 sticky flex w-full flex-col md:justify-center items-center py-2 space-y-2 md:space-y-0 md:space-x-2 top-0 background-gradient border-b-2 border-white">
-                <div className="flex flex-col space-y-2 mb-2 items-center">
-                    <label htmlFor="time-range">
-                        Time range:
-                        <select
-                            name="time-range"
-                            className="ml-2 p-2 border-2 border-fuchsia-600 rounded-md text-white cursor-pointer bg-fuchsia-600 disabled:bg-gray-600"
-                            value={timeRange}
-                            onChange={(e) =>
-                                setTimeRange(e.target.value as TimeRange)
-                            }
-                        >
-                            {TIME_RANGE_OPTIONS.map((option) => (
-                                <option key={option.value} value={option.value}>
-                                    {option.label}
-                                </option>
-                            ))}
-                        </select>
-                    </label>
-                    <div className="flex space-x-2">
-                        <Button onClick={() => getTopTracks()}>
-                            Get top tracks
-                        </Button>
-                        <Button onClick={() => getTopArtists()}>
-                            Get top artists
-                        </Button>
-                        {/* <Button onClick={() => getGenres()}>Get genres</Button> */}
-                        <Button onClick={() => reset()}>Reset</Button>
-                    </div>
-                </div>
-                {!hasRecommendations &&
+            <ControlsSection
+                getTopArtists={getTopArtists}
+                getTopTracks={getTopTracks}
+                reset={reset}
+                onGetRecommendations={() => {
+                    getRecommendations(
+                        selectedTrackIds,
+                        selectedArtistIs,
+                        selectedGenres
+                    );
+                }}
+                selectedArtists={selectedArtistIs
+                    .map((id) => topArtists.find((e) => e.id === id))
+                    .filter((e): e is Artist => !!e)}
+                selectedTracks={selectedTrackIds
+                    .map((id) => topTracks.find((e) => e.id === id))
+                    .filter((e): e is Track => !!e)}
+                selectedGenres={selectedGenres}
+                setTimeRange={setTimeRange}
+                timeRange={timeRange}
+                toggleArtistSelection={toggleArtistSelection}
+                toggleGenreSelection={toggleGenreSelection}
+                toggleTrackSelection={toggleTrackSelection}
+                showSelectedItems={
+                    !hasRecommendations &&
                     (selectedArtistIs.length > 0 ||
                         selectedTrackIds.length > 0 ||
-                        selectedGenres.length > 0) && (
-                        <div className="relative w-full">
-                            <SelectedItems
-                                selectedTracks={selectedTrackIds
-                                    .map((id) =>
-                                        topTracks.find((e) => e.id === id)
-                                    )
-                                    .filter((e): e is Track => !!e)}
-                                selectedArtists={selectedArtistIs
-                                    .map((id) =>
-                                        topArtists.find((e) => e.id === id)
-                                    )
-                                    .filter((e): e is Artist => !!e)}
-                                selectedGenres={selectedGenres}
-                                toggleArtistSelection={toggleArtistSelection}
-                                toggleTrackSelection={toggleTrackSelection}
-                                toggleGenreSelection={toggleGenreSelection}
-                                onGetRecommendations={() => {
-                                    getRecommendations(
-                                        selectedTrackIds,
-                                        selectedArtistIs,
-                                        selectedGenres
-                                    );
-                                }}
-                            />
-                        </div>
-                    )}
-            </div>
+                        selectedGenres.length > 0)
+                }
+            />
+
             {topMode !== TopMode.None && <p>Select up to 5 items:</p>}
             <div className="flex flex-wrap justify-center">
                 {topMode === TopMode.Tracks && (
