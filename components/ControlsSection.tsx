@@ -81,7 +81,7 @@ const ControlsSection: VFC<Props> = ({
                 'z-10 sticky flex w-full flex-col md:justify-center items-center py-2 space-y-2 md:space-y-0 md:space-x-2 top-0 background-gradient',
                 {
                     'border-b-2 border-white': isSticked,
-                    'py-20 md:py-40': isStartView,
+                    'py-6 md:py-40': isStartView,
                 }
             )}
         >

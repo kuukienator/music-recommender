@@ -14,7 +14,7 @@ const InformationOverlay: VFC<Props> = ({ onClose }) => (
                 top artists and songs.
             </p>
 
-            <PoweredBySpotify className="py-20" />
+            <PoweredBySpotify className="py-4" />
             <p> Built by Emmanuel Meinike</p>
             <a
                 href="https://twitter.com/kuukienator"
