@@ -1,8 +1,7 @@
 import { Album, SpotifyImageSizes } from './spotify';
 
-const getSmallestImage = (album: Album): string => {
-    return album.images.sort((a, b) => a.width - b.width)[0].url;
-};
+const getSmallestImage = (album: Album): string =>
+    album.images.sort((a, b) => a.width - b.width)[0].url;
 
 export const getAlbumImage = (
     album: Album,
