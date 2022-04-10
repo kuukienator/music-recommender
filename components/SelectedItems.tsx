@@ -6,16 +6,20 @@ import { Artist, Track } from '../lib/spotify';
 type Props = {
     selectedTracks: Array<Track>;
     selectedArtists: Array<Artist>;
+    selectedGenres: Array<string>;
     toggleTrackSelection: (track: Track) => void;
     toggleArtistSelection: (artist: Artist) => void;
+    toggleGenreSelection: (genre: string) => void;
     onGetRecommendations: () => void;
 };
 
 const SelectedItems: VFC<Props> = ({
     selectedArtists,
     selectedTracks,
+    selectedGenres,
     toggleArtistSelection,
     toggleTrackSelection,
+    toggleGenreSelection,
     onGetRecommendations,
 }) => {
     return (
@@ -79,10 +83,30 @@ const SelectedItems: VFC<Props> = ({
                     </div>
                 );
             })}
+            {selectedGenres.map((genre) => {
+                return (
+                    <div
+                        key={genre}
+                        onClick={() => toggleGenreSelection(genre)}
+                        className="bg-white bg-opacity-10 rounded-md p-2 flex items-center space-x-2 justify-between"
+                    >
+                        <div className="flex flex-col text-sm overflow-hidden">
+                            <span className="font-bold text-ellipsis overflow-hidden whitespace-nowrap uppercase">
+                                {genre}
+                            </span>
+                        </div>
+                        <Button className="text-sm">
+                            <RemoveIcon />
+                        </Button>
+                    </div>
+                );
+            })}
             <Button
                 onClick={onGetRecommendations}
                 disabled={
-                    selectedTracks.length === 0 && selectedArtists.length === 0
+                    selectedTracks.length === 0 &&
+                    selectedArtists.length === 0 &&
+                    selectedGenres.length === 0
                 }
             >
                 Get Recommendatons

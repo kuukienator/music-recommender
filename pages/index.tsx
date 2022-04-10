@@ -34,6 +34,7 @@ const TIME_RANGE_OPTIONS: Array<{ label: string; value: TimeRange }> = [
 enum TopMode {
     Tracks = 'tracks',
     Artists = 'artists',
+    Genres = 'genres',
     None = 'none',
 }
 
@@ -92,6 +93,7 @@ const Home: NextPage = () => {
         setGenres(genres);
         toggleHasRecommendations(false);
         setRecommendedTracks([]);
+        setTopMode(TopMode.Genres);
     };
 
     const getRecommendations = async (
@@ -116,7 +118,12 @@ const Home: NextPage = () => {
                 selectedTrackIds.filter((id) => id !== track.id)
             );
         } else {
-            if (selectedTrackIds.length + selectedArtistIs.length < 5) {
+            if (
+                selectedTrackIds.length +
+                    selectedArtistIs.length +
+                    selectedGenres.length <
+                5
+            ) {
                 setSelectedTrackIds([...selectedTrackIds, track.id]);
             }
         }
@@ -128,7 +135,12 @@ const Home: NextPage = () => {
                 selectedArtistIs.filter((id) => id !== artist.id)
             );
         } else {
-            if (selectedTrackIds.length + selectedArtistIs.length < 5) {
+            if (
+                selectedTrackIds.length +
+                    selectedArtistIs.length +
+                    selectedGenres.length <
+                5
+            ) {
                 setSelectedArtistIs([...selectedArtistIs, artist.id]);
             }
         }
@@ -138,7 +150,12 @@ const Home: NextPage = () => {
         if (selectedGenres.includes(genre)) {
             setSelectedGenres(selectedGenres.filter((id) => id !== genre));
         } else {
-            if (selectedGenres.length < 5) {
+            if (
+                selectedTrackIds.length +
+                    selectedArtistIs.length +
+                    selectedGenres.length <
+                5
+            ) {
                 setSelectedGenres([...selectedGenres, genre]);
             }
         }
@@ -157,8 +174,10 @@ const Home: NextPage = () => {
         setTopMode(TopMode.None);
         setSelectedArtistIs([]);
         setSelectedTrackIds([]);
+        setSelectedGenres([]);
         setTopArtists([]);
         setTopTracks([]);
+        setGenres([]);
         toggleHasRecommendations(false);
         setRecommendedTracks([]);
     };
@@ -230,6 +249,7 @@ const Home: NextPage = () => {
                         <Button onClick={() => getTopArtists()}>
                             Get top artists
                         </Button>
+                        {/* <Button onClick={() => getGenres()}>Get genres</Button> */}
                         <Button onClick={() => reset()}>Reset</Button>
                     </div>
                 </div>
@@ -249,8 +269,10 @@ const Home: NextPage = () => {
                                         topArtists.find((e) => e.id === id)
                                     )
                                     .filter((e): e is Artist => !!e)}
+                                selectedGenres={selectedGenres}
                                 toggleArtistSelection={toggleArtistSelection}
                                 toggleTrackSelection={toggleTrackSelection}
+                                toggleGenreSelection={toggleGenreSelection}
                                 onGetRecommendations={() => {
                                     getRecommendations(
                                         selectedTrackIds,
@@ -285,21 +307,16 @@ const Home: NextPage = () => {
                     toggleArtistSelection={toggleArtistSelection}
                 />
             )}
-            <div className="grid grid-cols-3 gap-2 ">
-                {genres
-                    .filter((genre) =>
-                        hasRecommendations
-                            ? selectedGenres.includes(genre)
-                            : true
-                    )
-                    .map((genre) => (
+            {topMode === TopMode.Genres && (
+                <div className="max-w-screen-2xl grid grid-cols-3 gap-2 auto-rows-fr sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 px-2 mb-2">
+                    {genres.map((genre) => (
                         <div
                             key={genre}
                             onClick={() => toggleGenreSelection(genre)}
                             className={clsx(
-                                'w-full aspect-square bg-green-500 rounded-md text-white font-bold flex justify-center items-center text-center uppercase',
+                                'w-full flex items-center justify-center cursor-pointer rounded-md bg-white bg-opacity-10 shadow-md hover:bg-opacity-30 text-center uppercase p-4',
                                 {
-                                    'border-2 border-red-500':
+                                    'bg-opacity-70 text-black':
                                         selectedGenres.includes(genre),
                                 }
                             )}
@@ -307,7 +324,8 @@ const Home: NextPage = () => {
                             {genre}
                         </div>
                     ))}
-            </div>
+                </div>
+            )}
 
             {hasRecommendations && (
                 <p className="text-lg my-2">Recommendtions:</p>
