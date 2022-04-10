@@ -17,8 +17,6 @@ import TrackList from '../components/TrackList';
 import Head from 'next/head';
 import Button from '../components/Button';
 import AddToPlaylistOverlay from '../components/AddToPlaylistOverlay';
-import { getAlbumImage } from '../lib/image';
-import RemoveIcon from '../icons/mono/remove.svg';
 import SelectedItems from '../components/SelectedItems';
 import ArtistGrid from '../components/ArtistGrid';
 import InformationIcon from '../icons/mono/circle-information.svg';

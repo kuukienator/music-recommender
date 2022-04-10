@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, VFC } from 'react';
+import React, { useEffect, useState, VFC } from 'react';
 import { playTrack, Track } from '../lib/spotify';
 import { getAccessToken } from '../lib/spotify-auth';
 import Button from './Button';
@@ -26,7 +26,6 @@ const SpotifyPlayer: VFC<Props> = ({ track, onAddToPlaylist }) => {
             }
             window.onSpotifyWebPlaybackSDKReady = () => {
                 const token = accessToken;
-                // @ts-ignore
                 const player = new window.Spotify.Player({
                     name: 'Spotify Recommender App',
                     getOAuthToken: (cb: (token: string) => void) => cb(token),
