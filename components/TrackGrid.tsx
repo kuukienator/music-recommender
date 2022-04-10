@@ -19,9 +19,10 @@ const TrackGrid: VFC<Props> = ({ tracks, onTrackClick, selection, mode }) => {
     return (
         <div
             className={clsx('max-w-screen-2xl', {
-                'grid grid-cols-2 gap-2 px-2 mb-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7':
+                'grid auto-rows-fr grid-cols-2 gap-2 px-2 mb-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7':
                     mode === TrackGridMode.Standard,
-                'grid grid-cols-5 gap-x-2 mx-2': mode === TrackGridMode.Compact,
+                'grid auto-rows-fr grid-cols-5 gap-x-2 mx-2':
+                    mode === TrackGridMode.Compact,
             })}
         >
             {tracks.map((track) => (

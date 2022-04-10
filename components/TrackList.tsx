@@ -14,11 +14,11 @@ type Props = {
 
 const TrackList: VFC<Props> = ({ tracks, onAddToPlaylist, onPlay }) => {
     return (
-        <div className="space-y-4 px-2 max-w-screen-2xl md:space-y-0 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-2 lg:gap-4 xl:grid-cols-4">
+        <div className="grid grid-cols-1 auto-rows-fr space-y-4 px-2 max-w-screen-2xl md:space-y-0 md:auto-rows-fr md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-2 lg:gap-4 xl:grid-cols-4">
             {tracks.map((track) => (
                 <div
                     key={track.id}
-                    className="flex items-center shadow-md justify-between bg-white bg-opacity-10 rounded-md hover:bg-opacity-30"
+                    className="flex items-center shadow-md justify-between bg-white bg-opacity-10 rounded-md hover:bg-opacity-30 px-2"
                 >
                     <a
                         className="flex space-x-4 items-center"
