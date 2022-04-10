@@ -21,6 +21,7 @@ import ControlsSection from '../components/ControlsSection';
 import { filterListByIds, scrollToTop } from '../lib/util';
 import GenreGrid from '../components/GenreGrid';
 import Header from '../components/Header';
+import Button from '../components/Button';
 
 enum TopMode {
     Tracks = 'tracks',
@@ -29,11 +30,23 @@ enum TopMode {
     None = 'none',
 }
 
+type HasNext = Record<TopMode, boolean>;
+
+const defaultHasNext: HasNext = {
+    [TopMode.Tracks]: false,
+    [TopMode.Artists]: false,
+    [TopMode.Genres]: false,
+    [TopMode.None]: false,
+};
+
 const Home: NextPage = () => {
     const [user, setCurrentUser] = useState<User | undefined>(undefined);
     const [topTracks, setTopTracks] = useState<Array<Track>>([]);
     const [topArtists, setTopArtists] = useState<Array<Artist>>([]);
     const [genres, setGenres] = useState<Array<string>>([]);
+    const [hasNextData, setHasNextData] = useState<HasNext>({
+        ...defaultHasNext,
+    });
 
     const [recommendedTracks, setRecommendedTracks] = useState<Array<Track>>(
         []
@@ -62,7 +75,7 @@ const Home: NextPage = () => {
     };
 
     const getTopTracks = async (page = 0) => {
-        const tracks = await getTopItems<Track>(
+        const { items: tracks, hasNext } = await getTopItems<Track>(
             ItemType.Tracks,
             timeRange,
             page
@@ -70,12 +83,13 @@ const Home: NextPage = () => {
         setTopTracks(page === 0 ? tracks : [...topTracks, ...tracks]);
         toggleHasRecommendations(false);
         setRecommendedTracks([]);
-        setCurrentPage(page + 1);
+        setCurrentPage(page);
         setTopMode(TopMode.Tracks);
+        setHasNextData({ ...hasNextData, [TopMode.Tracks]: hasNext });
     };
 
     const getTopArtists = async (page = 0) => {
-        const artists = await getTopItems<Artist>(
+        const { items: artists, hasNext } = await getTopItems<Artist>(
             ItemType.Artists,
             timeRange,
             page
@@ -83,8 +97,9 @@ const Home: NextPage = () => {
         setTopArtists(page === 0 ? artists : [...topArtists, ...artists]);
         toggleHasRecommendations(false);
         setRecommendedTracks([]);
-        setCurrentPage(page + 1);
+        setCurrentPage(page);
         setTopMode(TopMode.Artists);
+        setHasNextData({ ...hasNextData, [TopMode.Artists]: hasNext });
     };
 
     const getGenres = async () => {
@@ -93,6 +108,21 @@ const Home: NextPage = () => {
         toggleHasRecommendations(false);
         setRecommendedTracks([]);
         setTopMode(TopMode.Genres);
+        setHasNextData({ ...hasNextData, [TopMode.Genres]: false });
+    };
+
+    const loadMore = () => {
+        switch (topMode) {
+            case TopMode.Tracks:
+                getTopTracks(currentPage + 1);
+                break;
+            case TopMode.Artists:
+                getTopArtists(currentPage + 1);
+                break;
+            case TopMode.Genres:
+            default:
+                break;
+        }
     };
 
     const getRecommendations = async (
@@ -172,6 +202,7 @@ const Home: NextPage = () => {
         setGenres([]);
         toggleHasRecommendations(false);
         setRecommendedTracks([]);
+        setHasNextData({ ...defaultHasNext });
     };
 
     useEffect(() => {
@@ -253,6 +284,12 @@ const Home: NextPage = () => {
                     toggleGenreSelection={toggleGenreSelection}
                     selectedGenres={selectedGenres}
                 />
+            )}
+
+            {hasNextData[topMode] && (
+                <Button className="mb-2" onClick={loadMore}>
+                    Load more
+                </Button>
             )}
 
             {hasRecommendations && (

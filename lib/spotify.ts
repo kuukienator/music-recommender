@@ -82,7 +82,7 @@ export const getTopItems = async <T>(
     type: ItemType,
     timeRange: TimeRange,
     page = 0
-): Promise<Array<T>> => {
+): Promise<{ items: Array<T>; hasNext: boolean }> => {
     const limit = 40;
     const offset = page * limit;
     const data = await getData(
@@ -91,7 +91,10 @@ export const getTopItems = async <T>(
 
     console.log(page, data);
 
-    return data.items as Array<T>;
+    return {
+        items: data.items as Array<T>,
+        hasNext: data.next !== null,
+    };
 };
 
 export const getTrackRecommendations = async (
