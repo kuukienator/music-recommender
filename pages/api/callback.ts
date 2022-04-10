@@ -9,8 +9,6 @@ export default function handler(
     req: NextApiRequest,
     res: NextApiResponse<Data>
 ) {
-    console.log(req.query);
-
     const authOptions = {
         url: 'https://accounts.spotify.com/api/token',
         form: {

@@ -184,7 +184,6 @@ const Home: NextPage = () => {
     };
 
     const playPreview = (track: Track) => {
-        console.log('playPreview', track);
         setCurrentPreview(track);
     };
 

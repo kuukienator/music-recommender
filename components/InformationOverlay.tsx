@@ -1,5 +1,6 @@
 import React, { VFC } from 'react';
 import Overlay from './Overlay';
+import PoweredBySpotify from './PoweredBySpotify';
 
 type Props = {
     onClose: () => void;
@@ -13,12 +14,7 @@ const InformationOverlay: VFC<Props> = ({ onClose }) => (
                 top artists and songs.
             </p>
 
-            <p>Powered by:</p>
-            <img
-                className="w-40"
-                src="/logos/Spotify_Logo_RGB_Black.png"
-                alt="Spotify Logo"
-            />
+            <PoweredBySpotify className="py-20" />
             <p> Built by Emmanuel Meinike</p>
             <a
                 href="https://twitter.com/kuukienator"

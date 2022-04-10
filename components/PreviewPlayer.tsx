@@ -9,7 +9,6 @@ const PreviewPlayer: VFC<Props> = ({ track }) => {
     const audioPlayer = useRef<HTMLAudioElement>(null);
 
     useEffect(() => {
-        console.log(track?.name);
         if (audioPlayer.current) {
             if (track?.preview_url) {
                 audioPlayer.current.play();

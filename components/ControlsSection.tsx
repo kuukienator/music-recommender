@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import React, { useEffect, useRef, useState, VFC } from 'react';
 import { Artist, TimeRange, Track } from '../lib/spotify';
 import Button from './Button';
+import PoweredBySpotify from './PoweredBySpotify';
 import SelectedItems from './SelectedItems';
 
 type Props = {
@@ -73,7 +74,6 @@ const ControlsSection: VFC<Props> = ({
         };
     }, [containerRef]);
 
-    console.log(isSticked);
     return (
         <div
             ref={containerRef}
@@ -81,7 +81,7 @@ const ControlsSection: VFC<Props> = ({
                 'z-10 sticky flex w-full flex-col md:justify-center items-center py-2 space-y-2 md:space-y-0 md:space-x-2 top-0 background-gradient',
                 {
                     'border-b-2 border-white': isSticked,
-                    'py-40': isStartView,
+                    'py-20 md:py-40': isStartView,
                 }
             )}
         >
@@ -119,7 +119,8 @@ const ControlsSection: VFC<Props> = ({
                 </label>
                 <div
                     className={clsx('flex space-x-2', {
-                        'flex-col space-y-6 w-[40vw] space-x-0': isStartView,
+                        'flex-col space-y-6 w-[40vw] space-x-0 lg:w-[30vw] xl:w-[20vw]':
+                            isStartView,
                     })}
                 >
                     <Button onClick={() => getTopTracks()}>
@@ -131,6 +132,7 @@ const ControlsSection: VFC<Props> = ({
                     {/* <Button onClick={() => getGenres()}>Get genres</Button> */}
                     <Button onClick={() => reset()}>Reset</Button>
                 </div>
+                <PoweredBySpotify className="py-10" />
             </div>
             {showSelectedItems && (
                 <div className="relative w-full pt-2">
