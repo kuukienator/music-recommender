@@ -22,12 +22,6 @@ import InformationOverlay from '../components/InformationOverlay';
 import ControlsSection from '../components/ControlsSection';
 import { scrollToTop } from '../lib/util';
 
-const TIME_RANGE_OPTIONS: Array<{ label: string; value: TimeRange }> = [
-    { label: 'Multipe Years', value: TimeRange.LongTerm },
-    { label: 'Last 6 months', value: TimeRange.MediumTerm },
-    { label: 'Last 4 weeks', value: TimeRange.ShortTerm },
-];
-
 enum TopMode {
     Tracks = 'tracks',
     Artists = 'artists',
