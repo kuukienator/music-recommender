@@ -10,17 +10,17 @@ import {
     Artist,
     getMusicGenres,
 } from '../lib/spotify';
-import clsx from 'clsx';
 import TrackGrid, { TrackGridMode } from '../components/TrackGrid';
 import SpotifyPlayer from '../components/SpotifyPlayer';
 import TrackList from '../components/TrackList';
 import Head from 'next/head';
 import AddToPlaylistOverlay from '../components/AddToPlaylistOverlay';
 import ArtistGrid from '../components/ArtistGrid';
-import InformationIcon from '../icons/mono/circle-information.svg';
 import InformationOverlay from '../components/InformationOverlay';
 import ControlsSection from '../components/ControlsSection';
-import { scrollToTop } from '../lib/util';
+import { filterListByIds, scrollToTop } from '../lib/util';
+import GenreGrid from '../components/GenreGrid';
+import Header from '../components/Header';
 
 enum TopMode {
     Tracks = 'tracks',
@@ -191,29 +191,8 @@ const Home: NextPage = () => {
             <Head>
                 <title>Track Recommender | Powered by Spotify</title>
             </Head>
-            <header className="flex w-full justify-between items-center px-2 max-w-screen-2xl">
-                <div className="text-xl font-bold flex space-x-4">
-                    <span>Track Recommender</span>
-                    <InformationIcon
-                        className="cursor-pointer"
-                        onClick={() => toggleShowInformation(true)}
-                    />
-                </div>
-                <div>
-                    {user && (
-                        <div className="flex justify-center flex-row items-center py-2 space-x-2">
-                            <img
-                                src={user.image}
-                                alt={user.name}
-                                className="w-8 h-8 object-cover"
-                            />
-                            <p className="text-center text-lg font-bold">
-                                {user.name}
-                            </p>
-                        </div>
-                    )}
-                </div>
-            </header>
+            <Header user={user} toggleShowInformation={toggleShowInformation} />
+
             <ControlsSection
                 isStartView={topMode === TopMode.None && !hasRecommendations}
                 getTopArtists={getTopArtists}
@@ -226,12 +205,14 @@ const Home: NextPage = () => {
                         selectedGenres
                     );
                 }}
-                selectedArtists={selectedArtistIs
-                    .map((id) => topArtists.find((e) => e.id === id))
-                    .filter((e): e is Artist => !!e)}
-                selectedTracks={selectedTrackIds
-                    .map((id) => topTracks.find((e) => e.id === id))
-                    .filter((e): e is Track => !!e)}
+                selectedArtists={filterListByIds<Artist>(
+                    topArtists,
+                    selectedArtistIs
+                )}
+                selectedTracks={filterListByIds<Track>(
+                    topTracks,
+                    selectedTrackIds
+                )}
                 selectedGenres={selectedGenres}
                 setTimeRange={setTimeRange}
                 timeRange={timeRange}
@@ -239,10 +220,7 @@ const Home: NextPage = () => {
                 toggleGenreSelection={toggleGenreSelection}
                 toggleTrackSelection={toggleTrackSelection}
                 showSelectedItems={
-                    !hasRecommendations &&
-                    (selectedArtistIs.length > 0 ||
-                        selectedTrackIds.length > 0 ||
-                        selectedGenres.length > 0)
+                    !hasRecommendations && getSelectionCount() > 0
                 }
             />
 
@@ -270,23 +248,11 @@ const Home: NextPage = () => {
                 />
             )}
             {topMode === TopMode.Genres && (
-                <div className="max-w-screen-2xl grid grid-cols-3 gap-2 auto-rows-fr sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 px-2 mb-2">
-                    {genres.map((genre) => (
-                        <div
-                            key={genre}
-                            onClick={() => toggleGenreSelection(genre)}
-                            className={clsx(
-                                'w-full flex items-center justify-center cursor-pointer rounded-md bg-white bg-opacity-10 shadow-md hover:bg-opacity-30 text-center uppercase p-4',
-                                {
-                                    'bg-opacity-70 text-black':
-                                        selectedGenres.includes(genre),
-                                }
-                            )}
-                        >
-                            {genre}
-                        </div>
-                    ))}
-                </div>
+                <GenreGrid
+                    genres={genres}
+                    toggleGenreSelection={toggleGenreSelection}
+                    selectedGenres={selectedGenres}
+                />
             )}
 
             {hasRecommendations && (
