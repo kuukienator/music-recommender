@@ -6,14 +6,12 @@
 
 @layer components {
     .background-gradient {
-      @apply bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white;
-      /* @apply bg-[#3B1F50] text-white; */
-      /*@apply bg-gradient-to-r from-[#201053] via-[#271F9B] to-[#5B0C63] text-white;*/
-      /*@apply bg-gradient-to-r from-[#4D1ABC] via-[#540FA0] to-[#7C53D0] text-white;*/
-      /*@apply bg-gradient-to-r from-[#4F4EF6] via-[#BE67CA] to-[#C5A8DA] text-white;*/
+        @apply bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white;
+        /* @apply bg-[#3B1F50] text-white; */
+        /*@apply bg-gradient-to-r from-[#201053] via-[#271F9B] to-[#5B0C63] text-white;*/
+        /*@apply bg-gradient-to-r from-[#4D1ABC] via-[#540FA0] to-[#7C53D0] text-white;*/
+        /*@apply bg-gradient-to-r from-[#4F4EF6] via-[#BE67CA] to-[#C5A8DA] text-white;*/
 
-      /* @apply bg-gradient-to-r from-[#3A1D5C] via-[#C293EB] to-[#873776] text-white; */
-
-      
+        /* @apply bg-gradient-to-r from-[#3A1D5C] via-[#C293EB] to-[#873776] text-white; */
     }
-  }
+}
