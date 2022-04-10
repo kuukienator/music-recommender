@@ -130,7 +130,10 @@ export const fetchWithToken = async (
 
     return await fetch(input, {
         ...init,
-        headers: { Authorization: `Bearer ${accessToken}` },
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+            ...(init?.headers || {}),
+        },
     });
 };
 

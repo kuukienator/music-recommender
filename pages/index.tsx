@@ -9,7 +9,6 @@ import {
     TimeRange,
     Artist,
     getMusicGenres,
-    SpotifyImageSizes,
 } from '../lib/spotify';
 import clsx from 'clsx';
 import TrackGrid, { TrackGridMode } from '../components/TrackGrid';
@@ -112,53 +111,58 @@ const Home: NextPage = () => {
         window.scrollTo(0, 0);
     };
 
-    const toggleTrackSelection = (track: Track) => {
-        if (selectedTrackIds.includes(track.id)) {
-            setSelectedTrackIds(
-                selectedTrackIds.filter((id) => id !== track.id)
-            );
+    const toggleSelection = (
+        selection: Array<string>,
+        id: string,
+        selectedCount: number,
+        setter: (selection: Array<string>) => void
+    ) => {
+        if (selection.includes(id)) {
+            setter(selection.filter((entry) => entry !== id));
         } else {
-            if (
-                selectedTrackIds.length +
-                    selectedArtistIs.length +
-                    selectedGenres.length <
-                5
-            ) {
-                setSelectedTrackIds([...selectedTrackIds, track.id]);
+            if (selectedCount < 5) {
+                setter([...selection, id]);
             }
         }
+    };
+
+    const toggleTrackSelection = (track: Track) => {
+        const selectionCount =
+            selectedTrackIds.length +
+            selectedArtistIs.length +
+            selectedGenres.length;
+        toggleSelection(
+            selectedTrackIds,
+            track.id,
+            selectionCount,
+            setSelectedTrackIds
+        );
     };
 
     const toggleArtistSelection = (artist: Artist) => {
-        if (selectedArtistIs.includes(artist.id)) {
-            setSelectedArtistIs(
-                selectedArtistIs.filter((id) => id !== artist.id)
-            );
-        } else {
-            if (
-                selectedTrackIds.length +
-                    selectedArtistIs.length +
-                    selectedGenres.length <
-                5
-            ) {
-                setSelectedArtistIs([...selectedArtistIs, artist.id]);
-            }
-        }
+        const selectionCount =
+            selectedTrackIds.length +
+            selectedArtistIs.length +
+            selectedGenres.length;
+        toggleSelection(
+            selectedArtistIs,
+            artist.id,
+            selectionCount,
+            setSelectedArtistIs
+        );
     };
 
     const toggleGenreSelection = (genre: string) => {
-        if (selectedGenres.includes(genre)) {
-            setSelectedGenres(selectedGenres.filter((id) => id !== genre));
-        } else {
-            if (
-                selectedTrackIds.length +
-                    selectedArtistIs.length +
-                    selectedGenres.length <
-                5
-            ) {
-                setSelectedGenres([...selectedGenres, genre]);
-            }
-        }
+        const selectionCount =
+            selectedTrackIds.length +
+            selectedArtistIs.length +
+            selectedGenres.length;
+        toggleSelection(
+            selectedGenres,
+            genre,
+            selectionCount,
+            setSelectedGenres
+        );
     };
 
     const playPreview = (track: Track) => {

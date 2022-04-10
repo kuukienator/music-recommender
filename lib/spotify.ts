@@ -59,6 +59,25 @@ export type Playlist = {
     name: string;
 };
 
+const getData = async (
+    input: RequestInfo,
+    init?: RequestInit | undefined
+): Promise<any> => {
+    // TODO: handle errors and messaging
+    try {
+        const response = await fetchWithToken(input, init);
+        if (!response.ok) {
+            console.log('Error', response.statusText);
+            return {};
+        } else {
+            return await response.json();
+        }
+    } catch (error) {
+        console.log('Error', error);
+        return {};
+    }
+};
+
 export const getTopItems = async <T>(
     type: ItemType,
     timeRange: TimeRange,
@@ -66,11 +85,9 @@ export const getTopItems = async <T>(
 ): Promise<Array<T>> => {
     const limit = 40;
     const offset = page * limit;
-    const res = await fetchWithToken(
+    const data = await getData(
         `https://api.spotify.com/v1/me/top/${type}?limit=${limit}&time_range=${timeRange}&offset=${offset}`
     );
-
-    const data = await res.json();
 
     console.log(page, data);
 
@@ -89,11 +106,9 @@ export const getTrackRecommendations = async (
         .slice(0, 5 - (trackIds.length + artistIds.length))
         .join(',');
 
-    const res = await fetchWithToken(
+    const data = await getData(
         `https://api.spotify.com/v1/recommendations?seed_tracks=${seed_tracks}&seed_artists=${artists_tracks}&seed_genres=${seed_genres}&limit=${limit}`
     );
-
-    const data = await res.json();
 
     console.log(data);
 
@@ -101,11 +116,9 @@ export const getTrackRecommendations = async (
 };
 
 export const getMusicGenres = async (): Promise<Array<string>> => {
-    const res = await fetchWithToken(
+    const data = await getData(
         'https://api.spotify.com/v1/recommendations/available-genre-seeds'
     );
-
-    const data = await res.json();
 
     console.log(data);
 
@@ -115,11 +128,9 @@ export const getMusicGenres = async (): Promise<Array<string>> => {
 export const getUserPlaylists = async (
     userId: string
 ): Promise<Array<Playlist>> => {
-    const res = await fetchWithToken(
+    const data = await getData(
         `https://api.spotify.com/v1/users/${userId}/playlists?limit=50`
     );
-
-    const data = await res.json();
 
     console.log(data);
 
@@ -130,14 +141,28 @@ export const addTrackToPlaylist = async (
     trackId: string,
     playlistId: string
 ) => {
-    const res = await fetchWithToken(
+    const data = await getData(
         `https://api.spotify.com/v1/playlists/${playlistId}/tracks?uris=spotify:track:${trackId}`,
         {
             method: 'POST',
         }
     );
 
-    const data = await res.json();
-
     console.log(data);
+};
+
+export const playTrack = async (
+    deviceId: string,
+    track: Track
+): Promise<Response> => {
+    return fetchWithToken(
+        `https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`,
+        {
+            method: 'PUT',
+            body: JSON.stringify({ uris: [track.uri] }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }
+    );
 };
