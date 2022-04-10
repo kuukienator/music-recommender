@@ -19,7 +19,7 @@ const SelectedItems: VFC<Props> = ({
     onGetRecommendations,
 }) => {
     return (
-        <div className="absolute w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 px-2 pb-2 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 border-b-2 border-white">
+        <div className="absolute w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 px-2 pb-2 background-gradient border-b-2 border-white">
             {selectedTracks.map((track) => {
                 return (
                     <div

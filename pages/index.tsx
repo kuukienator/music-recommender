@@ -176,7 +176,7 @@ const Home: NextPage = () => {
     }, []);
 
     return (
-        <div className="min-h-screen flex items-center flex-col bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white">
+        <div className="min-h-screen flex items-center flex-col background-gradient">
             <Head>
                 <title>Track Recommender | Powered by Spotify</title>
             </Head>
@@ -204,7 +204,7 @@ const Home: NextPage = () => {
                 </div>
             </header>
 
-            <div className="z-10 sticky flex w-full flex-col md:justify-center items-center py-2 space-y-2 md:space-y-0 md:space-x-2 top-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white border-b-2 border-white">
+            <div className="z-10 sticky flex w-full flex-col md:justify-center items-center py-2 space-y-2 md:space-y-0 md:space-x-2 top-0 background-gradient border-b-2 border-white">
                 <div className="flex flex-col space-y-2 mb-2 items-center">
                     <label htmlFor="time-range">
                         Time range:

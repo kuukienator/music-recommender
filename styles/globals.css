@@ -3,3 +3,17 @@
 @tailwind utilities;
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+
+@layer components {
+    .background-gradient {
+      @apply bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white;
+      /* @apply bg-[#3B1F50] text-white; */
+      /*@apply bg-gradient-to-r from-[#201053] via-[#271F9B] to-[#5B0C63] text-white;*/
+      /*@apply bg-gradient-to-r from-[#4D1ABC] via-[#540FA0] to-[#7C53D0] text-white;*/
+      /*@apply bg-gradient-to-r from-[#4F4EF6] via-[#BE67CA] to-[#C5A8DA] text-white;*/
+
+      /* @apply bg-gradient-to-r from-[#3A1D5C] via-[#C293EB] to-[#873776] text-white; */
+
+      
+    }
+  }

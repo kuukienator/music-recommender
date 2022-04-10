@@ -19,7 +19,7 @@ const Overlay: FC<Props> = ({ onClose, children, closeButtonText, title }) => (
                     e.stopPropagation();
                 }
             }}
-            className="max-h-[80%] min-w-fit bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 flex flex-col m-2 shadow-md rounded-md"
+            className="max-h-[80%] min-w-fit background-gradient flex flex-col m-2 shadow-md rounded-md"
         >
             <div className="text-center text-lg font-bold p-2">{title}</div>
             {children}
