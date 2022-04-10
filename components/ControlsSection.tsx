@@ -96,9 +96,10 @@ const ControlsSection: VFC<Props> = ({
                         hidden: !isStartView,
                     })}
                 >
-                    Get some recommendatons based on your past music. To start
-                    load your top artists or music tracks. You can switch
-                    between them later.
+                    Get some recommendatons based on your past musicial habits.
+                    To start, load your top artists or music tracks and select
+                    up to 5 of them. You can switch between them later to mix
+                    and match. Add songs you like to your playlists and enjoy!
                 </div>
                 <label htmlFor="time-range">
                     Time range:
@@ -132,7 +133,7 @@ const ControlsSection: VFC<Props> = ({
                     {/* <Button onClick={() => getGenres()}>Get genres</Button> */}
                     <Button onClick={() => reset()}>Reset</Button>
                 </div>
-                <PoweredBySpotify className="py-10" />
+                {isStartView && <PoweredBySpotify className="py-10" />}
             </div>
             {showSelectedItems && (
                 <div className="relative w-full pt-2">
