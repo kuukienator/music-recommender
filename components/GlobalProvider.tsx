@@ -49,7 +49,7 @@ export const GlobalContextProvider: FC = ({ children }) => {
     return (
         <GlobalContext.Provider value={{ addMessage, clearMessages }}>
             {children}
-            {messages.length && (
+            {messages.length > 0 && (
                 <div className="fixed bottom-0 left-0 right-0 z-50">
                     <div className="flex flex-col space-y-4 mx-4 my-8">
                         {messages.map((message) => (
