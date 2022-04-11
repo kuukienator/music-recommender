@@ -4,6 +4,7 @@ export enum JourneySteps {
     Start = 'start',
     ChooseTracks = 'chooseTracks',
     ChooseArtists = 'chooseArtists',
+    ChooseGenres = 'chooseGenres',
     ShowRecommendations = 'showRecommendations',
 }
 
