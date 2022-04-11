@@ -222,6 +222,7 @@ const Home: NextPage = () => {
         setRecommendedTracks([]);
         setHasNextData({ ...defaultHasNext });
         clearMessages();
+        setCurrentPreview(undefined);
     };
 
     const loginHandler = async () => {
