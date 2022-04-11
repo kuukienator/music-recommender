@@ -23,16 +23,17 @@ import GenreGrid from '../components/GenreGrid';
 import Header from '../components/Header';
 import Button from '../components/Button';
 
-type HasNext = Record<JourneySteps, boolean>;
+type SelectionJourneyStep =
+    | JourneySteps.ChooseArtists
+    | JourneySteps.ChooseGenres
+    | JourneySteps.ChooseTracks;
+
+type HasNext = Record<SelectionJourneyStep, boolean>;
 
 const defaultHasNext: HasNext = {
     [JourneySteps.ChooseArtists]: false,
     [JourneySteps.ChooseGenres]: false,
     [JourneySteps.ChooseTracks]: false,
-    [JourneySteps.Start]: false,
-    [JourneySteps.Loading]: false,
-    [JourneySteps.Login]: false,
-    [JourneySteps.ShowRecommendations]: false,
 };
 
 const Home: NextPage = () => {
@@ -220,16 +221,9 @@ const Home: NextPage = () => {
                 setJourneyStep(JourneySteps.Start);
             } else {
                 setJourneyStep(JourneySteps.Login);
-                /*
-                return login()
-                    .then(() => getCurrentUser())
-                    .then((user) => setCurrentUser(user));
-                    */
             }
         });
     }, []);
-
-    console.log('STEP', journeyStep);
 
     return (
         <div className="min-h-screen flex items-center flex-col background-gradient">
@@ -296,7 +290,7 @@ const Home: NextPage = () => {
                     selectedGenres={selectedGenres}
                 />
             )}
-            {hasNextData[journeyStep] && (
+            {hasNextData[journeyStep as SelectionJourneyStep] && (
                 <Button className="mb-2" onClick={loadMore}>
                     Load more
                 </Button>
