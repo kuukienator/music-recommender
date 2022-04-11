@@ -12,7 +12,7 @@ type Props = {
 
 const SpotifyPlayer: VFC<Props> = ({ track, onAddToPlaylist }) => {
     const [deviceId, setDeviceId] = useState<string | null>(null);
-    const [player, setPlayer] = useState<any>(null);
+    const [player, setPlayer] = useState<Spotify.Player | null>(null);
 
     useEffect(() => {
         const script = document.createElement('script');
@@ -80,7 +80,7 @@ const SpotifyPlayer: VFC<Props> = ({ track, onAddToPlaylist }) => {
                     <Button
                         onClick={() => {
                             console.log('stopping', player);
-                            player.pause();
+                            player?.pause();
                         }}
                     >
                         <StopIcon className="text-white" />

@@ -18,28 +18,28 @@ import AddToPlaylistOverlay from '../components/AddToPlaylistOverlay';
 import ArtistGrid from '../components/ArtistGrid';
 import InformationOverlay from '../components/InformationOverlay';
 import ControlsSection from '../components/ControlsSection';
-import { filterListByIds, scrollToTop } from '../lib/util';
+import { filterListByIds, JourneySteps, scrollToTop } from '../lib/util';
 import GenreGrid from '../components/GenreGrid';
 import Header from '../components/Header';
 import Button from '../components/Button';
 
-enum TopMode {
-    Tracks = 'tracks',
-    Artists = 'artists',
-    Genres = 'genres',
-    None = 'none',
-}
+type SelectionJourneyStep =
+    | JourneySteps.ChooseArtists
+    | JourneySteps.ChooseGenres
+    | JourneySteps.ChooseTracks;
 
-type HasNext = Record<TopMode, boolean>;
+type HasNext = Record<SelectionJourneyStep, boolean>;
 
 const defaultHasNext: HasNext = {
-    [TopMode.Tracks]: false,
-    [TopMode.Artists]: false,
-    [TopMode.Genres]: false,
-    [TopMode.None]: false,
+    [JourneySteps.ChooseArtists]: false,
+    [JourneySteps.ChooseGenres]: false,
+    [JourneySteps.ChooseTracks]: false,
 };
 
 const Home: NextPage = () => {
+    const [journeyStep, setJourneyStep] = useState<JourneySteps>(
+        JourneySteps.Loading
+    );
     const [user, setCurrentUser] = useState<User | undefined>(undefined);
     const [topTracks, setTopTracks] = useState<Array<Track>>([]);
     const [topArtists, setTopArtists] = useState<Array<Artist>>([]);
@@ -63,7 +63,6 @@ const Home: NextPage = () => {
     const [currentPage, setCurrentPage] = useState<number>(0);
     const [timeRange, setTimeRange] = useState<TimeRange>(TimeRange.ShortTerm);
     const [trackToAdd, setTrackToAdd] = useState<Track | undefined>();
-    const [topMode, setTopMode] = useState<TopMode>(TopMode.None);
     const [showInformation, toggleShowInformation] = useState<boolean>(false);
 
     const getSelectionCount = (): number => {
@@ -84,8 +83,11 @@ const Home: NextPage = () => {
         toggleHasRecommendations(false);
         setRecommendedTracks([]);
         setCurrentPage(page);
-        setTopMode(TopMode.Tracks);
-        setHasNextData({ ...hasNextData, [TopMode.Tracks]: hasNext });
+        setJourneyStep(JourneySteps.ChooseTracks);
+        setHasNextData({
+            ...hasNextData,
+            [JourneySteps.ChooseTracks]: hasNext,
+        });
     };
 
     const getTopArtists = async (page = 0) => {
@@ -98,8 +100,11 @@ const Home: NextPage = () => {
         toggleHasRecommendations(false);
         setRecommendedTracks([]);
         setCurrentPage(page);
-        setTopMode(TopMode.Artists);
-        setHasNextData({ ...hasNextData, [TopMode.Artists]: hasNext });
+        setJourneyStep(JourneySteps.ChooseArtists);
+        setHasNextData({
+            ...hasNextData,
+            [JourneySteps.ChooseArtists]: hasNext,
+        });
     };
 
     const getGenres = async () => {
@@ -107,19 +112,18 @@ const Home: NextPage = () => {
         setGenres(genres);
         toggleHasRecommendations(false);
         setRecommendedTracks([]);
-        setTopMode(TopMode.Genres);
-        setHasNextData({ ...hasNextData, [TopMode.Genres]: false });
+        setJourneyStep(JourneySteps.ChooseGenres);
+        setHasNextData({ ...hasNextData, [JourneySteps.ChooseGenres]: false });
     };
 
     const loadMore = () => {
-        switch (topMode) {
-            case TopMode.Tracks:
+        switch (journeyStep) {
+            case JourneySteps.ChooseTracks:
                 getTopTracks(currentPage + 1);
                 break;
-            case TopMode.Artists:
+            case JourneySteps.ChooseArtists:
                 getTopArtists(currentPage + 1);
                 break;
-            case TopMode.Genres:
             default:
                 break;
         }
@@ -137,7 +141,7 @@ const Home: NextPage = () => {
         );
         setRecommendedTracks(tracks);
         toggleHasRecommendations(true);
-        setTopMode(TopMode.None);
+        setJourneyStep(JourneySteps.ShowRecommendations);
         scrollToTop();
     };
 
@@ -192,7 +196,7 @@ const Home: NextPage = () => {
     };
 
     const reset = () => {
-        setTopMode(TopMode.None);
+        setJourneyStep(JourneySteps.Start);
         setSelectedArtistIs([]);
         setSelectedTrackIds([]);
         setSelectedGenres([]);
@@ -204,14 +208,19 @@ const Home: NextPage = () => {
         setHasNextData({ ...defaultHasNext });
     };
 
+    const loginHandler = async () => {
+        await login();
+        const user = await getCurrentUser();
+        setCurrentUser(user);
+    };
+
     useEffect(() => {
         getCurrentUser().then((user) => {
             if (user) {
                 setCurrentUser(user);
+                setJourneyStep(JourneySteps.Start);
             } else {
-                return login()
-                    .then(() => getCurrentUser())
-                    .then((user) => setCurrentUser(user));
+                setJourneyStep(JourneySteps.Login);
             }
         });
     }, []);
@@ -224,10 +233,11 @@ const Home: NextPage = () => {
             <Header user={user} toggleShowInformation={toggleShowInformation} />
 
             <ControlsSection
-                isStartView={topMode === TopMode.None && !hasRecommendations}
+                currentStep={journeyStep}
                 getTopArtists={getTopArtists}
                 getTopTracks={getTopTracks}
                 reset={reset}
+                login={loginHandler}
                 onGetRecommendations={() => {
                     getRecommendations(
                         selectedTrackIds,
@@ -254,55 +264,50 @@ const Home: NextPage = () => {
                 }
             />
 
-            {topMode !== TopMode.None && <p>Select up to 5 items:</p>}
-            <div className="flex flex-wrap justify-center">
-                {topMode === TopMode.Tracks && (
-                    <TrackGrid
-                        tracks={topTracks}
-                        selection={selectedTrackIds}
-                        onTrackClick={toggleTrackSelection}
-                        mode={
-                            hasRecommendations
-                                ? TrackGridMode.Compact
-                                : TrackGridMode.Standard
-                        }
-                    />
-                )}
-            </div>
-
-            {topMode === TopMode.Artists && (
+            {journeyStep === JourneySteps.ChooseTracks && (
+                <TrackGrid
+                    tracks={topTracks}
+                    selection={selectedTrackIds}
+                    onTrackClick={toggleTrackSelection}
+                    mode={
+                        hasRecommendations
+                            ? TrackGridMode.Compact
+                            : TrackGridMode.Standard
+                    }
+                />
+            )}
+            {journeyStep === JourneySteps.ChooseArtists && (
                 <ArtistGrid
                     artists={topArtists}
                     selectedArtistIs={selectedArtistIs}
                     toggleArtistSelection={toggleArtistSelection}
                 />
             )}
-            {topMode === TopMode.Genres && (
+            {journeyStep === JourneySteps.ChooseGenres && (
                 <GenreGrid
                     genres={genres}
                     toggleGenreSelection={toggleGenreSelection}
                     selectedGenres={selectedGenres}
                 />
             )}
-
-            {hasNextData[topMode] && (
+            {hasNextData[journeyStep as SelectionJourneyStep] && (
                 <Button className="mb-2" onClick={loadMore}>
                     Load more
                 </Button>
             )}
-
             {hasRecommendations && (
                 <p className="text-lg my-2">Recommendtions:</p>
             )}
-            <div className="flex flex-wrap justify-center text-white">
-                <TrackList
-                    tracks={recommendedTracks}
-                    selection={[]}
-                    onAddToPlaylist={addToPlaylist}
-                    onPlay={playPreview}
-                />
-            </div>
-
+            {hasRecommendations && (
+                <div className="flex flex-wrap justify-center text-white">
+                    <TrackList
+                        tracks={recommendedTracks}
+                        selection={[]}
+                        onAddToPlaylist={addToPlaylist}
+                        onPlay={playPreview}
+                    />
+                </div>
+            )}
             <SpotifyPlayer
                 track={currentPreview}
                 onAddToPlaylist={addToPlaylist}
