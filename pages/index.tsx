@@ -18,7 +18,7 @@ import AddToPlaylistOverlay from '../components/AddToPlaylistOverlay';
 import ArtistGrid from '../components/ArtistGrid';
 import InformationOverlay from '../components/InformationOverlay';
 import ControlsSection from '../components/ControlsSection';
-import { filterListByIds, scrollToTop } from '../lib/util';
+import { filterListByIds, JourneySteps, scrollToTop } from '../lib/util';
 import GenreGrid from '../components/GenreGrid';
 import Header from '../components/Header';
 import Button from '../components/Button';
@@ -40,6 +40,9 @@ const defaultHasNext: HasNext = {
 };
 
 const Home: NextPage = () => {
+    const [journeyStep, setJourneyStep] = useState<JourneySteps>(
+        JourneySteps.Loading
+    );
     const [user, setCurrentUser] = useState<User | undefined>(undefined);
     const [topTracks, setTopTracks] = useState<Array<Track>>([]);
     const [topArtists, setTopArtists] = useState<Array<Artist>>([]);
@@ -85,6 +88,7 @@ const Home: NextPage = () => {
         setRecommendedTracks([]);
         setCurrentPage(page);
         setTopMode(TopMode.Tracks);
+        setJourneyStep(JourneySteps.ChooseTracks);
         setHasNextData({ ...hasNextData, [TopMode.Tracks]: hasNext });
     };
 
@@ -99,6 +103,7 @@ const Home: NextPage = () => {
         setRecommendedTracks([]);
         setCurrentPage(page);
         setTopMode(TopMode.Artists);
+        setJourneyStep(JourneySteps.ChooseArtists);
         setHasNextData({ ...hasNextData, [TopMode.Artists]: hasNext });
     };
 
@@ -138,6 +143,7 @@ const Home: NextPage = () => {
         setRecommendedTracks(tracks);
         toggleHasRecommendations(true);
         setTopMode(TopMode.None);
+        setJourneyStep(JourneySteps.ShowRecommendations);
         scrollToTop();
     };
 
@@ -193,6 +199,7 @@ const Home: NextPage = () => {
 
     const reset = () => {
         setTopMode(TopMode.None);
+        setJourneyStep(JourneySteps.Start);
         setSelectedArtistIs([]);
         setSelectedTrackIds([]);
         setSelectedGenres([]);
@@ -204,17 +211,29 @@ const Home: NextPage = () => {
         setHasNextData({ ...defaultHasNext });
     };
 
+    const loginHandler = async () => {
+        await login();
+        const user = await getCurrentUser();
+        setCurrentUser(user);
+    };
+
     useEffect(() => {
         getCurrentUser().then((user) => {
             if (user) {
                 setCurrentUser(user);
+                setJourneyStep(JourneySteps.Start);
             } else {
+                setJourneyStep(JourneySteps.Login);
+                /*
                 return login()
                     .then(() => getCurrentUser())
                     .then((user) => setCurrentUser(user));
+                    */
             }
         });
     }, []);
+
+    console.log('STEP', journeyStep);
 
     return (
         <div className="min-h-screen flex items-center flex-col background-gradient">
@@ -224,10 +243,11 @@ const Home: NextPage = () => {
             <Header user={user} toggleShowInformation={toggleShowInformation} />
 
             <ControlsSection
-                isStartView={topMode === TopMode.None && !hasRecommendations}
+                currentStep={journeyStep}
                 getTopArtists={getTopArtists}
                 getTopTracks={getTopTracks}
                 reset={reset}
+                login={loginHandler}
                 onGetRecommendations={() => {
                     getRecommendations(
                         selectedTrackIds,
@@ -254,7 +274,6 @@ const Home: NextPage = () => {
                 }
             />
 
-            {topMode !== TopMode.None && <p>Select up to 5 items:</p>}
             <div className="flex flex-wrap justify-center">
                 {topMode === TopMode.Tracks && (
                     <TrackGrid

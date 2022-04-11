@@ -1,3 +1,20 @@
+export enum JourneySteps {
+    Loading = 'loading',
+    Login = 'login',
+    Start = 'start',
+    ChooseTracks = 'chooseTracks',
+    ChooseArtists = 'chooseArtists',
+    ShowRecommendations = 'showRecommendations',
+}
+
+export const isStepBeforeStart = (step: JourneySteps): boolean =>
+    step === JourneySteps.Loading || step === JourneySteps.Login;
+
+export const isStepBeforeChoosing = (step: JourneySteps): boolean =>
+    step === JourneySteps.Loading ||
+    step === JourneySteps.Login ||
+    step === JourneySteps.Start;
+
 export const scrollToTop = () => window.scrollTo(0, 0);
 
 export const filterListByIds = <T extends { id: string }>(
