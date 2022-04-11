@@ -55,10 +55,16 @@ const SpotifyPlayer: VFC<Props> = ({ track, onAddToPlaylist }) => {
     }, []);
 
     useEffect(() => {
-        if (track && deviceId) {
-            playTrack(deviceId, track);
+        if (track) {
+            if (deviceId) {
+                playTrack(deviceId, track);
+            }
+        } else {
+            if (player) {
+                player.pause();
+            }
         }
-    }, [track, deviceId]);
+    }, [track, deviceId, player]);
 
     if (!track) {
         return null;

@@ -318,9 +318,11 @@ const Home: NextPage = () => {
                 <div className="flex flex-wrap justify-center text-white">
                     <TrackList
                         tracks={recommendedTracks}
+                        currentPreviewTrack={currentPreview}
                         selection={[]}
                         onAddToPlaylist={addToPlaylist}
                         onPlay={playPreview}
+                        onStop={() => setCurrentPreview(undefined)}
                     />
                 </div>
             )}
