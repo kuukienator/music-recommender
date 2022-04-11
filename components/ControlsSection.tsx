@@ -1,11 +1,7 @@
 import clsx from 'clsx';
 import React, { useEffect, useRef, useState, VFC } from 'react';
 import { Artist, TimeRange, Track } from '../lib/spotify';
-import {
-    isStepBeforeChoosing,
-    isStepBeforeStart,
-    JourneySteps,
-} from '../lib/util';
+import { isStepBeforeChoosing, JourneySteps } from '../lib/util';
 import Button from './Button';
 import PoweredBySpotify from './PoweredBySpotify';
 import SelectedItems from './SelectedItems';
@@ -89,15 +85,14 @@ const ControlsSection: VFC<Props> = ({
                 {
                     'border-b-2 border-white': isSticked,
                     'py-6 md:py-40 h-[90vh] justify-between md:justify-between':
-                        isStepBeforeStart(currentStep) ||
-                        currentStep === JourneySteps.Start,
+                        isStepBeforeChoosing(currentStep),
                 }
             )}
         >
             <div
                 className={clsx('flex flex-col space-y-2 items-center', {
                     'space-y-4 md:max-w-[60vw] px-8':
-                        currentStep === JourneySteps.Start,
+                        isStepBeforeChoosing(currentStep),
                 })}
             >
                 {isStepBeforeChoosing(currentStep) && (
@@ -130,7 +125,7 @@ const ControlsSection: VFC<Props> = ({
                 <div
                     className={clsx('flex space-x-2', {
                         'flex-col space-y-6 w-[40vw] space-x-0 lg:w-[30vw] xl:w-[20vw]':
-                            currentStep === JourneySteps.Start,
+                            isStepBeforeChoosing(currentStep),
                     })}
                 >
                     {currentStep === JourneySteps.Loading && (
@@ -142,18 +137,6 @@ const ControlsSection: VFC<Props> = ({
                             </div>
                             <p className="text-xl">Loading...</p>
                         </div>
-                    )}
-                    {currentStep !== JourneySteps.Login && (
-                        <>
-                            {/* <Button onClick={() => getTopTracks()}>
-                                Get top tracks
-                            </Button> */}
-                            {/* <Button onClick={() => getTopArtists()}>
-                                Get top artists
-                            </Button> */}
-                            {/* <Button onClick={() => getGenres()}>Get genres</Button> */}
-                            {/* <Button onClick={() => reset()}>Reset</Button> */}
-                        </>
                     )}
                     {currentStep === JourneySteps.Login && (
                         <Button onClick={() => login()}>
