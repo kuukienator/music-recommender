@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { getCurrentUser, login, User } from '../lib/spotify-auth';
 import {
     getTopItems,
@@ -22,6 +22,11 @@ import { filterListByIds, JourneySteps, scrollToTop } from '../lib/util';
 import GenreGrid from '../components/GenreGrid';
 import Header from '../components/Header';
 import Button from '../components/Button';
+import {
+    getId,
+    GlobalContext,
+    MessageType,
+} from '../components/GlobalProvider';
 
 type SelectionJourneyStep =
     | JourneySteps.ChooseArtists
@@ -37,6 +42,8 @@ const defaultHasNext: HasNext = {
 };
 
 const Home: NextPage = () => {
+    const { clearMessage, addMessage } = useContext(GlobalContext);
+
     const [journeyStep, setJourneyStep] = useState<JourneySteps>(
         JourneySteps.Loading
     );
@@ -156,6 +163,14 @@ const Home: NextPage = () => {
         } else {
             if (selectedCount < 5) {
                 setter([...selection, id]);
+            } else {
+                addMessage({
+                    text: 'You can only select 5 items.',
+                    title: 'Selection warning',
+                    type: MessageType.Warning,
+                    id: getId(),
+                    timeout: 2000,
+                });
             }
         }
     };
@@ -206,6 +221,7 @@ const Home: NextPage = () => {
         toggleHasRecommendations(false);
         setRecommendedTracks([]);
         setHasNextData({ ...defaultHasNext });
+        clearMessage();
     };
 
     const loginHandler = async () => {
