@@ -42,7 +42,7 @@ const defaultHasNext: HasNext = {
 };
 
 const Home: NextPage = () => {
-    const { clearMessage, addMessage } = useContext(GlobalContext);
+    const { clearMessages, addMessage } = useContext(GlobalContext);
 
     const [journeyStep, setJourneyStep] = useState<JourneySteps>(
         JourneySteps.Loading
@@ -221,7 +221,7 @@ const Home: NextPage = () => {
         toggleHasRecommendations(false);
         setRecommendedTracks([]);
         setHasNextData({ ...defaultHasNext });
-        clearMessage();
+        clearMessages();
     };
 
     const loginHandler = async () => {
