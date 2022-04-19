@@ -55,41 +55,41 @@ Get Music recommendations based on your top artists and songs.
 #### Main screen
 
 <div>
-    <img src="/docs/images/desktop-1.png" width="400">
+    <img src="/docs/images/desktop-1.png">
 </div>
 
 #### Track selection screen
 
 <div>
-    <img src="/docs/images/desktop-2.png" width="400">
+    <img src="/docs/images/desktop-2.png">
 </div>
 
 #### Artist selection screen
 
 <div>
-    <img src="/docs/images/desktop-3.png" width="400">
+    <img src="/docs/images/desktop-3.png">
 </div>
 
 #### Selected items screen
 
 <div>
-    <img src="/docs/images/desktop-4.png" width="400">
+    <img src="/docs/images/desktop-4.png">
 </div>
 
 #### Recommended tracks screen
 
 <div>
-    <img src="/docs/images/desktop-5.png" width="400">
+    <img src="/docs/images/desktop-5.png">
 </div>
 
 #### Add recommendation to playlist screen
 
 <div>
-    <img src="/docs/images/desktop-6.png" width="400">
+    <img src="/docs/images/desktop-6.png">
 </div>
 
 #### Play preview screen
 
 <div>
-    <img src="/docs/images/desktop-7.png" width="400">
+    <img src="/docs/images/desktop-7.png">
 </div>
