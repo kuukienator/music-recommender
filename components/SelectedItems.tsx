@@ -22,7 +22,7 @@ const SelectedItems: VFC<Props> = ({
     toggleGenreSelection,
     onGetRecommendations,
 }) => (
-    <div className="absolute w-full grid auto-rows-fr grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 px-2 pb-2 background-gradient border-b-2 border-white">
+    <div className="w-full grid auto-rows-fr grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 px-2 pb-2 background-gradient">
         {selectedTracks.map((track) => {
             return (
                 <div

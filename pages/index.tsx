@@ -313,9 +313,6 @@ const Home: NextPage = () => {
                 </Button>
             )}
             {hasRecommendations && (
-                <p className="text-lg my-2">Recommendtions:</p>
-            )}
-            {hasRecommendations && (
                 <div className="flex flex-wrap justify-center text-white">
                     <TrackList
                         tracks={recommendedTracks}
