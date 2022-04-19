@@ -6,30 +6,90 @@ Get Music recommendations based on your top artists and songs.
 
 ## Screenshots
 
+### Mobile
+
+#### Main screen
+
 <div>
     <img src="/docs/images/mobile-1.png" width="400">
 </div>
+
+#### Track selection screen
 
 <div>
     <img src="/docs/images/mobile-2.png" width="400">
 </div>
 
+#### Artist selection screen
+
 <div>
     <img src="/docs/images/mobile-3.png" width="400">
 </div>
+
+#### Selected items screen
 
 <div>
     <img src="/docs/images/mobile-4.png" width="400">
 </div>
 
+#### Recommended tracks screen
+
 <div>
     <img src="/docs/images/mobile-5.png" width="400">
 </div>
+
+#### Add recommendation to playlist screen
 
 <div>
     <img src="/docs/images/mobile-6.png" width="400">
 </div>
 
+#### Play preview screen
+
 <div>
     <img src="/docs/images/mobile-7.png" width="400">
+</div>
+
+### Desktop
+
+#### Main screen
+
+<div>
+    <img src="/docs/images/desktop-1.png" width="400">
+</div>
+
+#### Track selection screen
+
+<div>
+    <img src="/docs/images/desktop-2.png" width="400">
+</div>
+
+#### Artist selection screen
+
+<div>
+    <img src="/docs/images/desktop-3.png" width="400">
+</div>
+
+#### Selected items screen
+
+<div>
+    <img src="/docs/images/desktop-4.png" width="400">
+</div>
+
+#### Recommended tracks screen
+
+<div>
+    <img src="/docs/images/desktop-5.png" width="400">
+</div>
+
+#### Add recommendation to playlist screen
+
+<div>
+    <img src="/docs/images/desktop-6.png" width="400">
+</div>
+
+#### Play preview screen
+
+<div>
+    <img src="/docs/images/desktop-7.png" width="400">
 </div>
