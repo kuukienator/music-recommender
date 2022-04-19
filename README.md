@@ -4,6 +4,8 @@
 
 Get Music recommendations based on your top artists and songs.
 
+Built using NextJS, Typescript, TailwindCSS and the SpotifyAPI.
+
 ## Screenshots
 
 ### Mobile
