@@ -6,6 +6,9 @@ Get Music recommendations based on your top artists and songs.
 
 Built using NextJS, Typescript, TailwindCSS and the SpotifyAPI.
 
+Demo: [https://spotify-music-recommender.vercel.app/](https://spotify-music-recommender.vercel.app/)
+(Requires requesting access since it's still in "development" mode)
+
 ## Screenshots
 
 ### Mobile
