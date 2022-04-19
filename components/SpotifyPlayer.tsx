@@ -71,7 +71,7 @@ const SpotifyPlayer: VFC<Props> = ({ track, onAddToPlaylist }) => {
     }
 
     return (
-        <div className="fixed bottom-0 left-0 right-0 bg-transparent backdrop-blur border-t-2 border-white">
+        <div className="fixed bottom-0 left-0 right-0 bg-indigo-500 text-white border-t-2 border-white">
             <div className="flex items-center justify-between">
                 <img
                     className="w-20 h-20"
