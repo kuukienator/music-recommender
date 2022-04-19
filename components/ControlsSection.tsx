@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState, VFC } from 'react';
 import { Artist, TimeRange, Track } from '../lib/spotify';
 import { isStepBeforeChoosing, JourneySteps } from '../lib/util';
 import Button from './Button';
+import LinkButton from './LinkButton';
 import PoweredBySpotify from './PoweredBySpotify';
 import SelectedItems from './SelectedItems';
 
@@ -143,6 +144,15 @@ const ControlsSection: VFC<Props> = ({
                             Login to Spotify
                         </Button>
                     )}
+
+                    {currentStep === JourneySteps.Login && (
+                        <LinkButton
+                            href="mailto:emmanuel.meinike@gmail.com?subject=Requesting access to Music Recommender"
+                            target="_blank"
+                        >
+                            Request preview access
+                        </LinkButton>
+                    )}
                     {currentStep === JourneySteps.Start && (
                         <>
                             <Button onClick={() => getTopTracks()}>
@@ -173,6 +183,14 @@ const ControlsSection: VFC<Props> = ({
                         </Button>
                     )}
                 </div>
+                {currentStep === JourneySteps.Login && (
+                    <div>
+                        <p className="text-sm text-center">
+                            While app is in development, access must be
+                            requested manually.
+                        </p>
+                    </div>
+                )}
             </div>
             {isStepBeforeChoosing(currentStep) && (
                 <PoweredBySpotify className="" />
